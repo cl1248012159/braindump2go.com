@@ -58,7 +58,7 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
     {
         Mage::log($resource,null,'amy.log');
         Mage::log($resourceType,null,'amy.log');
-$resource = str_replace('http://demo.braindump2go.com/','https://demo.braindump2go.com/',$resource);
+        $resource = str_replace('http://demo.braindump2go.com/','https://demo.braindump2go.com/',$resource);
 
         $helper = Mage::helper('downloadable/download');
         /* @var $helper Mage_Downloadable_Helper_Download */
@@ -115,7 +115,7 @@ $resource = str_replace('http://demo.braindump2go.com/','https://demo.braindump2
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
             } catch (Mage_Core_Exception $e) {
-                $this->_getSession()->addError(Mage::helper('downloadable')->__('An error occurred while getting requested content. Please contact the store owner.'));
+                $this->_getSession()->addError(Mage::helper('downloadable')->__('An error occurred while getting requested content. Please contact the store owner1.'));
             }
         }
         return $this->_redirectReferer();
