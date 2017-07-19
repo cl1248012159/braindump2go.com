@@ -1,0 +1,5 @@
+<ul class="form-list checkmo-list" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none">
+	<?php if ($this->getMethod()->getPayableTo()): ?>
+    	<li><?php echo Mage::helper('payment')->__('<label>Payment Information:</label> %s', $this->getMethod()->getPayableTo()) ?></li>
+    <?php endif; ?>
+</ul>

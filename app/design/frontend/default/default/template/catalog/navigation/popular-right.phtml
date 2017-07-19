@@ -1,0 +1,118 @@
+<script type="text/javascript">
+
+function openMenu(obj,id){
+
+	obj.className="level1 over";
+
+	document.getElementById('display_id'+id).className = 'needdisplay shown-sub';
+
+	document.getElementById('level1_id'+id).className = 'level1_a over_a';
+
+}
+
+function closeMenu(obj,id){
+
+	obj.className="level1";
+
+	document.getElementById('display_id'+id).className = 'needdisplay';
+
+	document.getElementById('level1_id'+id).className = 'level1_a';
+
+}
+
+
+
+</script>
+
+<div class="vendors">
+
+        <div class="vendors_layout">
+
+        <div class="vendors_left_top"></div>
+
+        <div class="vendors_right_top"></div>
+
+        <div class="vendors_left_bottom"></div>
+
+        <div class="vendors_right_bottom"></div>
+
+        </div>
+
+        <div class="vendors_title">
+
+              <h2>Most Popular Vendors</h2>
+
+        </div>
+
+        <div class="vendors_text">
+
+            <ul>
+
+
+
+            	<?php
+
+            	$categories = array();
+
+            	$level_count = 0;
+
+            	foreach ($this->getStoreCategories() as $category) {
+
+            		if($level_count>70){
+
+            ?>
+
+            	<li class="leve1_more">
+
+            		<a class="level1_a"  href="<?php echo $this->getUrl()?>all-products.html" >
+
+            			<span>More &gt;&gt;</span>
+
+            		</a>
+
+            	</li>
+
+            	<?php
+
+                 break;}else{$level_count++;}
+
+            		if ($category->getIsActive()) {		
+
+            	?>
+
+            
+
+                	<li>
+
+                		<a href="<?php echo $this->getCategoryUrl($category) ?>">
+
+                			<span>&nbsp<?php echo $this->htmlEscape($category->getName());?></span>
+
+                		</a>
+
+                	
+
+                	</li>
+
+            	<?php }if($level_count>33){
+
+            		   break;
+
+            		  } }?>
+
+            	</ul>
+
+                <div class="more fB">
+
+                    <a href="<?php echo $this->getBaseUrl()?>all-products.html"> >> View All Vendors</a>
+
+                </div>
+
+      </div>
+
+
+
+</div>
+
+
+

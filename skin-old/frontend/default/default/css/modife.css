@@ -1,0 +1,16 @@
+/* CSS Document */
+.product_static{font-size: 13pt;
+    font-weight: bold;color: #4F81BD;}
+.login_in_show{ background:#2B5785;margin: 0 0 5px 0; padding:20px 10px; width:224px; color:#fff; display:inline-block;}
+.wel_cus{ float:left; clear:both;}
+.loginoutimg{ float:right;  background:url(../bg/logout.gif); width:65px; height:25px;}
+.accountimg{ float:left; background: url(../bg/myaccount.gif); width:95px; height:25px;}
+.banner1,.banner2,.banner3{background:#eee;margin: 0 2px;
+    text-align: center;
+    width: 17px;}
+.banner_on_0,.banner_on_1,.banner_on_2{background:#5EBBEB; font-weight:bold;}
+
+#play_list a{ position:absolute; top:0; left:0;
+    height: 295px;
+    overflow: hidden;
+    width: 750px;}

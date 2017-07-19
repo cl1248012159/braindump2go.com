@@ -1,0 +1,103 @@
+
+<div class="all_pr">
+<?php
+$index = $_REQUEST['index']?$_REQUEST['index']:'A';
+?>
+<div class="all_cat">
+	<ul class="abc">
+		<li <?php echo $index=='A'?'class="zimu_on"':''; ?> ><a href="?index=A">A</a></li>
+		<li <?php echo $index=='B'?'class="zimu_on"':''; ?> ><a href="?index=B">B</a></li>
+		<li <?php echo $index=='C'?'class="zimu_on"':''; ?> ><a href="?index=C">C</a></li>
+		<li <?php echo $index=='D'?'class="zimu_on"':''; ?> ><a href="?index=D">D</a></li>
+		<li <?php echo $index=='E'?'class="zimu_on"':''; ?> ><a href="?index=E">E</a></li>
+		<li <?php echo $index=='F'?'class="zimu_on"':''; ?> ><a href="?index=F">F</a></li>
+		<li <?php echo $index=='G'?'class="zimu_on"':''; ?> ><a href="?index=G">G</a></li>
+		<li <?php echo $index=='H'?'class="zimu_on"':''; ?> ><a href="?index=H">H</a></li>
+		<li <?php echo $index=='I'?'class="zimu_on"':''; ?> ><a href="?index=I">I</a></li>
+		<li <?php echo $index=='J'?'class="zimu_on"':''; ?> ><a href="?index=J">J</a></li>
+		<li <?php echo $index=='K'?'class="zimu_on"':''; ?> ><a href="?index=K">K</a></li>
+		<li <?php echo $index=='L'?'class="zimu_on"':''; ?> ><a href="?index=L">L</a></li>
+		<li <?php echo $index=='M'?'class="zimu_on"':''; ?> ><a href="?index=M">M</a></li>
+		<li <?php echo $index=='N'?'class="zimu_on"':''; ?> ><a href="?index=N">N</a></li>
+		<li <?php echo $index=='O'?'class="zimu_on"':''; ?> ><a href="?index=O">O</a></li>
+		<li <?php echo $index=='P'?'class="zimu_on"':''; ?> ><a href="?index=P">P</a></li>
+		<li <?php echo $index=='Q'?'class="zimu_on"':''; ?> ><a href="?index=Q">Q</a></li>
+		<li <?php echo $index=='R'?'class="zimu_on"':''; ?> ><a href="?index=R">R</a></li>
+		<li <?php echo $index=='S'?'class="zimu_on"':''; ?> ><a href="?index=S">S</a></li>
+		<li <?php echo $index=='T'?'class="zimu_on"':''; ?> ><a href="?index=T">T</a></li>
+		<li <?php echo $index=='U'?'class="zimu_on"':''; ?> ><a href="?index=U">U</a></li>
+		<li <?php echo $index=='V'?'class="zimu_on"':''; ?> ><a href="?index=V">V</a></li>
+		<li <?php echo $index=='W'?'class="zimu_on"':''; ?> ><a href="?index=W">W</a></li>
+		<li <?php echo $index=='X'?'class="zimu_on"':''; ?> ><a href="?index=X">X</a></li>
+		<li <?php echo $index=='Y'?'class="zimu_on"':''; ?> ><a href="?index=Y">Y</a></li>
+		<li <?php echo $index=='Z'?'class="zimu_on"':''; ?> ><a href="?index=Z">Z</a></li>
+		<li <?php echo $index=='0-9'?'class="zimu_on"':''; ?> ><a href="?index=0-9">0-9</a></li>
+	</ul>
+
+<?php
+
+$categories_zimu = array();
+
+foreach ($this->getStoreCategories() as $category) 
+{
+	if ($category->getIsActive()) 
+	{
+     $categoryName = $this->htmlEscape($category->getName());
+     $shouzimu = substr($categoryName,0,1);
+	
+	 if($shouzimu == $index){
+	 	$categories_zimu[]=$category;
+	 }
+	 if($index == '0-9'){
+		 if($shouzimu=='0'||$shouzimu=='1'||$shouzimu=='2'||$shouzimu=='3'||$shouzimu=='4'||$shouzimu=='5'||$shouzimu=='6'||$shouzimu=='7'||$shouzimu=='8'||$shouzimu=='9'){
+			$categories_zimu[]=$category;
+		 }
+	 }
+	 	
+	}
+}
+
+$count_cat = count($categories_zimu);
+?>
+<dl class="dl_all">
+<?php
+for($i=0;$i<$count_cat;$i++)
+{
+	$category_zi = $categories_zimu[$i];
+	?>
+	<dd class="dd_all">
+	<a href="<?php echo $this->getCategoryUrl($category_zi) ?>"><?php echo $this->htmlEscape($category_zi->getName());	?></a>	
+	</dd>
+	<?php
+		// get all children
+		if (Mage::helper('catalog/category_flat')->isEnabled()) {
+			$children = (array)$category_zi->getChildrenNodes();
+			$childrenCount = count($children);
+		} else {
+			$children = $category_zi->getChildren();
+			$childrenCount = $children->count();
+		}
+		
+		// select active children
+		
+		$childCategories = array();
+		?>
+		<ul class="dl_ul">		
+		<?php
+		foreach ($children as $child) {
+			if ($child->getIsActive()) {
+			?>
+			<li><a href="<?php echo $this->getCategoryUrl($child) ?>"><?php echo $this->htmlEscape($child->getName());?></a></li>
+			<?php 
+			}
+		}
+		?>
+		</ul>
+		<hr style="float: left; width: 100%;"/>
+		<?php
+}
+?>
+
+</dl>
+</div>
+</div>

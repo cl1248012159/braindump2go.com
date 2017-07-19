@@ -1,0 +1,62 @@
+<?php
+ $_cat = new Mage_Catalog_Block_Navigation();
+ $curent_cat = $_cat->getCurrentCategory();
+ $curent_cat_id = $curent_cat->getId(); 
+ $category = Mage::registry('current_category')->getName(); 
+$_cat = new Mage_Catalog_Block_Navigation();
+$curent_cat = $_cat->getCurrentCategory();
+$curent_cat_id = $curent_cat->getId(); 
+ $category = Mage::registry('current_category')->getName(); 
+ $products = Mage::getModel('catalog/category')->load($curent_cat_id)
+    ->getProductCollection()
+    ->addAttributeToSelect('*')
+    ->addAttributeToFilter('status', 1)
+    ->addAttributeToFilter('visibility', 4);
+?>
+<style type="text/css">
+#venexamlist {
+	width: 250px;
+	height: auto;
+	background: none;
+	margin-bottom: 10px;
+}
+#venexamlist h1 {
+	background: url(/skin/frontend/default/default/images/title.gif);
+	text-align: left;
+	color: #fff;
+	white-space:nowrap; 
+	overflow:hidden; 
+	text-overflow:ellipsis;
+}
+#venexamlist ul li {
+	width: 75px;
+}
+.vendors_title {
+	width: 240px;
+	background: url(/skin/frontend/default/default/images/title.gif);
+}
+.vendors_title h2 {
+	color: #fff;
+}
+.vendors_text {
+	width: 240px;
+}
+#topCent {
+	width: 1000px;
+}
+.list-right {
+	padding: 120px 0 1px;
+}
+.topFrm {
+	width: 1000px;
+}
+</style>
+<div id="venexamlist">
+  <h1>Popular <?php echo $category;?> Exams</h1>
+  <ul>
+    <?php $i = 0; foreach($products as $_product):?>
+    <li><a href="<?php echo trim($_product->getSku());?>.html"><?php echo $_product->getSku();?></a></li>
+    <?php if ($i++ > 70) break; endforeach;?>
+  </ul>
+  <!--div class="foot"></div--> 
+</div>

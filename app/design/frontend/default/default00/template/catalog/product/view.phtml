@@ -1,0 +1,240 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="product-view">
+    <div class="product-essential">
+		<div class="product-name">
+			<h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>: <?php echo $_product->getSku();?> Exam</h1>
+		</div>
+			
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+		
+		<div class="product-img-box">
+            <?php echo $this->getChildHtml('media') ?>
+        </div>
+
+        <div class="product-shop">
+            <p class="pc5 fb"><?php echo $_product->getSku();?> Questions & Answers</p>
+			
+			<?php if ($_additional = $this->getChildHtml('additional')):?>
+				<div class="collateral-box">					
+					<?php echo $_additional ?>
+				</div>
+			<?php endif;?>
+			
+            <?php echo $this->getChildHtml('alert_urls') ?>
+			
+            <?php echo $this->getChildHtml('product_type_data') ?>
+			
+            <?php echo $this->getTierPriceHtml() ?>
+			
+            <?php echo $this->getChildHtml('extrahint') ?>
+            <?php echo $this->getChildHtml('addtocart') ?>
+
+            <?php if (!$this->hasOptions()):?>
+                <div class="add-to-box">
+                    <?php if($_product->isSaleable()): ?>
+                        <?php echo $this->getChildHtml('addtocart') ?>
+                        <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                            <span class="or"><?php echo $this->__('OR') ?></span>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <?php echo $this->getChildHtml('addto') ?>
+                </div>
+                <?php echo $this->getChildHtml('extra_buttons') ?>
+            <?php endif; ?>
+
+            <?php echo $this->getChildHtml('other');?>
+
+            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+            <?php endif;?>
+
+        </div>
+
+
+
+        <div class="clearer"></div>
+        <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+            <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+        <?php endif;?>
+    </form>
+    <script type="text/javascript">
+    //<![CDATA[
+        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function(button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+
+                if (url) {
+                   form.action = url;
+                }
+                var e = null;
+                try {
+                    this.form.submit();
+                } catch (e) {
+                }
+                this.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+                if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);
+    //]]>
+    </script>
+    </div>
+
+    <div class="producteral">
+		<?php if ($_description = $this->getChildHtml('description')):?>
+            <div class="collateral-box">
+               
+                <?php 
+		$excludeAttr = array();
+				$data = array();
+       
+        $attributes = $_product->getAttributes();
+        foreach ($attributes as $attribute) {
+            if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
+                $value = $attribute->getFrontend()->getValue($_product);
+
+                if (!$_product->hasData($attribute->getAttributeCode())) {
+                    $value = Mage::helper('catalog')->__('N/A');
+                } elseif ((string)$value == '') {
+                    $value = Mage::helper('catalog')->__('No');
+                } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
+                    $value = Mage::app()->getStore()->convertPrice($value, true);
+                }
+
+                if (is_string($value) && strlen($value)) {
+                    $data[$attribute->getAttributeCode()] = array(
+                        'label' => $attribute->getStoreLabel(),
+                        'value' => $value,
+                        'code'  => $attribute->getAttributeCode()
+                    );
+                }
+            }
+        }
+		
+				
+				
+				$cat_ids = $_product->getCategoryIds();
+				$level_1_cat_id = array();
+				$level_2_cat_id = array();
+				
+				foreach($cat_ids as $cat_id){				
+				$category_cat = Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($cat_id);
+				
+				if($category_cat->getLevel()==2){
+					$level_1_cat_id[] = $category_cat->getId();
+				}
+				
+				if($category_cat->getLevel()==3){
+					$level_2_cat_id[$category_cat->getParentCategory()->getId()] = $category_cat->getId();					
+				}
+				
+				}
+				
+				$level_1_cat =  Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($level_1_cat_id[0]);
+				$level_2_cat = Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($level_2_cat_id[$level_1_cat_id[0]]);				
+			
+				?>
+                <div class="head-des">
+                   <?php echo $level_1_cat->getName().' '.$_product->getSku().' Exam'; ?>
+                </div>
+	<p>
+                "<?php echo $data[exam_name][value];?>", also known as <?php echo $_product->getSku();?> exam, is a <a href="<?php echo $level_1_cat->getUrl();?>"><?php echo $level_1_cat->getName();?> Certification</a>. With the complete collection of questions and answers, PassLeader has assembled to take you through <?php  $qa = array(); $qa = explode(" ", $data[q_a][value]); echo $qa[0];  ?> Q&As to your <?php echo $_product->getSku();?> Exam preparation. In the <?php echo $_product->getSku();?> exam resources, you will cover every field and category in <?php echo $level_1_cat->getName();?> Certification helping to ready you for your successful <?php echo $level_1_cat->getName();?> Certification.				</p>
+				
+<p class="product_static">Free PDF Demo Download</p>
+
+<p>PassLeader offers free PDF demo for <?php echo $_product->getSku();?> exam (<?php echo $data[exam_name][value];?>). You can check out the interface, question quality and usability of our practice exams before you decide to buy it.
+</p>
+
+<p class="product_static">Quality and Value for the <?php echo $_product->getSku();?> Exam</p>
+
+<p>PassLeader Practice Exams for <?php echo $level_1_cat->getName();?> <?php echo $_product->getSku();?> Certification are written to the highest standards of technical accuracy, using only certified subject matter experts and published authors for development. <?php echo $level_1_cat->getName();?> <a href="<?php echo $_product->getUrl();?>"><?php echo $_product->getSku();?> practice tests</a> contain almost 100% correct answers are tested and approved by senior <?php echo $level_1_cat->getName();?> lecturers and experts which can make you succeed in the exam.
+</p>
+
+<p class="product_static">100% Pass Guaranteed or Full Refund</p>
+
+<p>We guarantee your success in the first attempt. If you do not pass the "<?php echo $_product->getSku();?> " (<?php echo $data[exam_name][value];?>,) on your first attempt, send us the official result. We will give you a FULLY REFUND of your purchasing fee OR send you another same value product for free.
+</p>
+
+<p class="product_static">Prompt Updates on <?php echo $_product->getSku();?></p>
+
+<p>Once there is some changes on <?php echo $_product->getSku();?> exam, we will update the study materials timely to make them be consistent with the current exam. We devote to giving our customers the best and latest <?php echo $level_1_cat->getName();?> <a href="<?php echo $_product->getUrl();?>"><?php echo $_product->getSku();?> dumps</a>. Besides, the product you buy will be updated in time within One Year for free.
+</p>
+
+<p class="product_static">Best After-Sale Service</p>
+
+<p>PassLeader is sparing no efforts to offer all customers the best after-sale service. We can supply you with 7*24 customer support to settle your questions and will timely deal with your problems after receiving them. Therefore, if you have any questions about <?php echo $level_1_cat->getName();?> <a href="<?php echo $level_2_cat->getUrl();?>"><?php echo $level_2_cat->getName();?></a> <?php echo $_product->getSku();?> Certification, you can contact us anytime you want. We believe that only if our customers are satisfied, can we develop.</p>
+            </div>
+        <?php endif;?>
+    </div>
+</div>

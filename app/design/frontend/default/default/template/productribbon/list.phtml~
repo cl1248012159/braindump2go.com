@@ -1,0 +1,636 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2011 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+
+
+<?php
+    
+    //$productCollections=new Mage_Catalog_Block_Product_List();
+
+    $_productCollection=$this->getLoadedProductCollection();
+    $_helper = $this->helper('catalog/output');
+  ?> 
+    
+  <?php 
+    //get product limit from store config
+   $productslimitforNew = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/number_for_display_ribbon_new_product');
+   $productlimitforBest = Mage::getStoreConfig('productribbon/mconnectbestproduct/number_for_display_ribbon_best_product');
+   $productlimitforReview = Mage::getStoreConfig('productribbon/mconnectreviewproduct/number_for_display_ribbon_review_product');
+   
+   //get enable/disable value from store config
+    $getnewproductsRibbon = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/new_products_module_enable_disable');
+    $getbestproductsRibbon = Mage::getStoreConfig('productribbon/mconnectbestproduct/best_products_module_enable_disable');
+    $getsalesproductsRibbon = Mage::getStoreConfig('productribbon/mconnectsalesproduct/sales_products_module_enable_disable');
+    $getreviewproductsRibbon = Mage::getStoreConfig('productribbon/mconnectreviewproduct/review_products_module_enable_disable');
+
+  ?>
+
+  <?php  //New Products Collection
+      if($getnewproductsRibbon == 1){
+     $Newproductcollectionlabel=Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
+     $Newproductcollectionlabel->setOrder('entity_id','desc');
+     $Newproductcollectionlabel->setPageSize($productslimitforNew);
+     $countcollectionNew = count($Newproductcollectionlabel);
+     //echo $Newproductcollectionlabel->getSelect();
+     
+     if($countcollectionNew > 0){
+          $Npc = array();
+          //$Npc123 = array();
+          foreach($Newproductcollectionlabel as $NewProductsCollection)
+          {
+            $Npc[] = $NewProductsCollection['sku'];
+            //$Npc123[] = $NewProductsCollection['sku'];
+          }
+          
+          } }
+?>
+
+<?php //best seling product label 
+    if($getbestproductsRibbon == 1){
+    $storeId=Mage::app()->getStore()->getId();
+
+    $bestsellerproductcollection=Mage::getResourceModel('reports/product_collection')
+    ->addAttributeToSelect('*')
+    ->addOrderedQty()
+    ->addStoreFilter($storeId)
+    ->setOrder('ordered_qty','desc')
+    ->setPageSize($productlimitforBest);
+   // echo $bestsellerproductcollection->getSelect();
+    $Bpc = array(); 
+    foreach($bestsellerproductcollection as $productBestseller)
+    {
+        $Bpc[] = $productBestseller['sku'];
+    } }
+?>  
+
+<?php // most reviewed products
+if($getreviewproductsRibbon == 1){
+$_tbl_reviewEntitySummary = Mage::getSingleton('core/resource')->getTableName('review_entity_summary');		
+
+		$_productCollectionreivew = Mage::getResourceModel('reports/product_collection')//Mage::getModel('catalog/product')->getCollection()
+		->addAttributeToSelect('*')
+		->setStoreId($storeId)
+		->addStoreFilter($storeId)
+		->addAttributeToSelect('status')
+		->addAttributeToFilter('status', 1);
+		//->addAttributeToFilter('visibility', $visibility);
+		$_productCollectionreivew->getSelect()
+		->join( array('table_reviewsummary'=>$_tbl_reviewEntitySummary), 'e.entity_id = table_reviewsummary.entity_pk_value', array('SUM(table_reviewsummary.reviews_count) AS reviewcnttot'))
+		->group('table_reviewsummary.entity_pk_value')
+		->order('reviewcnttot desc')
+		->limit($productlimitforReview);
+        //echo $_productCollectionreivew->getSelect();
+                
+        $Rpc = array(); 
+        if(count($_productCollectionreivew) > 0){
+        foreach($_productCollectionreivew as $_productreview) {
+            $Rpc[] = $_productreview['sku'];
+        } } }
+?>
+
+<?php 
+//get image path 
+$getnewproductsimagename = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/new_products_ribbon');
+$getbestproductsimagename = Mage::getStoreConfig('productribbon/mconnectbestproduct/best_products_ribbon');
+$getsalesproductsimagename = Mage::getStoreConfig('productribbon/mconnectsalesproduct/sales_products_ribbon');
+$getreviewproductsimagename = Mage::getStoreConfig('productribbon/mconnectreviewproduct/review_products_ribbon');
+
+//get days from admin
+$adminDayFornewproduct = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/number_for_display_ribbon_new');
+$adminDayForBestproduct = Mage::getStoreConfig('productribbon/mconnectbestproduct/number_for_display_ribbon_best');
+$adminDayForReviewproduct = Mage::getStoreConfig('productribbon/mconnectreviewproduct/number_for_display_ribbon_review');
+
+//get style from admin for ribbon
+$adminStyleNew = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/style_for_logo_new_Ribbon');
+$adminStyleBest = Mage::getStoreConfig('productribbon/mconnectbestproduct/style_for_best_Ribbon');
+$adminStyleSales = Mage::getStoreConfig('productribbon/mconnectsalesproduct/style_for_sales_Ribbon');
+$adminStyleReview = Mage::getStoreConfig('productribbon/mconnectreviewproduct/style_for_review_Ribbon');
+?>
+
+<?php // For new product section
+
+if($getnewproductsRibbon == 1 && count($Npc) > 0){
+    
+//get New arrival product from model
+$getproductRibbonModel = Mage::getModel('productribbon/productribbon');
+$datacollection = $getproductRibbonModel->getCollection()->getData();
+//echo count($datacollection);
+$modelSku = array();
+foreach($datacollection as $RiboonModel){
+    $modelSku[] = $RiboonModel['sku'];
+}
+    
+
+//update if limit change for New producs
+$getNewproductLimitConfig = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/number_for_display_ribbon_new_product_hidden');
+if($getNewproductLimitConfig == ''){
+  $getStoreConfigDataNew = new Mage_Core_Model_Config();
+  $getStoreConfigDataNew->saveConfig('productribbon/mconnectnewproductarrival/number_for_display_ribbon_new_product_hidden', $productslimitforNew, 'default', 0);
+    
+}
+
+// set the status 0
+if($productslimitforNew != $getNewproductLimitConfig && $getNewproductLimitConfig != ''){
+$updatetabel0 = Mage::getModel('productribbon/productribbon')->getCollection();
+$updatetabel0->addFieldToFilter('sku',array('nin'=>array($Npc)));
+if($updatetabel0->count() > 0){
+//echo $updatetabel->getSelect();
+foreach($updatetabel0 as $up0){
+    $updatetheSku0 = Mage::getModel('productribbon/productribbon')->load($up0->getId());
+    $updatetheSku0->setViewStatus(0)->save();
+  } } 
+  
+  //set the status 1
+$updatetabel1 = Mage::getModel('productribbon/productribbon')->getCollection();
+$updatetabel1->addFieldToFilter('sku',array('in'=>array($Npc)));
+if($updatetabel1->count() > 0){
+//echo $updatetabel->getSelect();
+foreach($updatetabel1 as $up1){
+    $updatetheSku1 = Mage::getModel('productribbon/productribbon')->load($up1->getId());
+    $updatetheSku1->setViewStatus(1)->save();
+  } } 
+  
+  $getStoreConfigData = new Mage_Core_Model_Config();
+  $getStoreConfigData->saveConfig('productribbon/mconnectnewproductarrival/number_for_display_ribbon_new_product_hidden', $productslimitforNew, 'default', 0);
+  
+  } }                        
+?>
+
+<?php // Best Product Section
+
+if($getbestproductsRibbon == 1 && count($Bpc) > 0){
+    
+//get Best seller product from model
+$getproductRibbonModel1 = Mage::getModel('productribbon/productribbonbest');
+$datacollection1 = $getproductRibbonModel1->getCollection()->getData();
+$modelSku1 = array();
+foreach($datacollection1 as $RiboonModel1){
+    $modelSku1[] = $RiboonModel1['sku'];
+} 
+    
+//update if limit change for Best Seller producs    
+$getBestproductLimitConfig = Mage::getStoreConfig('productribbon/mconnectbestproduct/number_for_display_ribbon_best_product_hidden');
+if($getBestproductLimitConfig == ''){
+  $getStoreConfigDataBest0 = new Mage_Core_Model_Config();
+  $getStoreConfigDataBest0->saveConfig('productribbon/mconnectbestproduct/number_for_display_ribbon_best_product_hidden', $productlimitforBest, 'default', 0);
+    
+}
+
+// set the status 0
+if($productlimitforBest != $getBestproductLimitConfig && $getBestproductLimitConfig != ''){
+$updatetabelBest0 = Mage::getModel('productribbon/productribbonbest')->getCollection();
+$updatetabelBest0->addFieldToFilter('sku',array('nin'=>array($Bpc)));
+if($updatetabelBest0->count() > 0){
+//echo $updatetabelBest0->getSelect();
+foreach($updatetabelBest0 as $upb0){
+    $updatetheSkuBest0 = Mage::getModel('productribbon/productribbonbest')->load($upb0->getId());
+    $updatetheSkuBest0->setViewStatus(0)->save();
+  } } 
+  
+  //set the status 1
+$updatetabelBest1 = Mage::getModel('productribbon/productribbonbest')->getCollection();
+$updatetabelBest1->addFieldToFilter('sku',array('in'=>array($Bpc)));
+if($updatetabelBest1->count() > 0){
+//echo $updatetabelBest1->getSelect();
+foreach($updatetabelBest1 as $upb1){
+    $updatetheSkuBest1 = Mage::getModel('productribbon/productribbonbest')->load($upb1->getId());
+    $updatetheSkuBest1->setViewStatus(1)->save();
+  } } 
+  
+  $getStoreConfigDataBest1 = new Mage_Core_Model_Config();
+  $getStoreConfigDataBest1->saveConfig('productribbon/mconnectbestproduct/number_for_display_ribbon_best_product_hidden', $productlimitforBest, 'default', 0);
+  
+  }  }                       
+?>
+
+<?php // Most Reviewed Product section 
+
+if($getreviewproductsRibbon == 1 && count($Rpc)> 0){
+
+//get most Reviewed product
+$getproductRibbonModel2 = Mage::getModel('productribbon/productribbonrivewed');
+$datacollection2 = $getproductRibbonModel2->getCollection()->getData();
+$modelSku2 = array();
+foreach($datacollection2 as $RiboonModel2){
+    $modelSku2[] = $RiboonModel2['sku'];
+}
+    
+//update if limit change for Most Reviewed producs
+$getReviewproductLimitConfig = Mage::getStoreConfig('productribbon/mconnectreviewproduct/number_for_display_ribbon_review_product_hidden');
+if($getReviewproductLimitConfig == ''){
+  $getStoreConfigDataReview0 = new Mage_Core_Model_Config();
+  $getStoreConfigDataReview0->saveConfig('productribbon/mconnectreviewproduct/number_for_display_ribbon_review_product_hidden', $productlimitforReview, 'default', 0);
+    
+}
+
+// set the status 0
+if($productlimitforReview != $getReviewproductLimitConfig && $getReviewproductLimitConfig != ''){
+$updatetabelReview0 = Mage::getModel('productribbon/productribbonrivewed')->getCollection();
+$updatetabelReview0->addFieldToFilter('sku',array('nin'=>array($Rpc)));
+if($updatetabelReview0->count() > 0){
+//echo $updatetabelReview0->getSelect();
+foreach($updatetabelReview0 as $upr0){
+    $updatetheSkuReview0 = Mage::getModel('productribbon/productribbonrivewed')->load($upr0->getId());
+    $updatetheSkuReview0->setViewStatus(0)->save();
+  } } 
+  
+  //set the status 1
+$updatetabelReview1 = Mage::getModel('productribbon/productribbonrivewed')->getCollection();
+$updatetabelReview1->addFieldToFilter('sku',array('in'=>array($Rpc)));
+if($updatetabelReview1->count() > 0){
+//echo $updatetabelReview1->getSelect();
+foreach($updatetabelReview1 as $upr1){
+    $updatetheSkuReview1 = Mage::getModel('productribbon/productribbonrivewed')->load($upr1->getId());
+    $updatetheSkuReview1->setViewStatus(1)->save();
+  } } 
+  
+  $getStoreConfigDataReview1 = new Mage_Core_Model_Config();
+  $getStoreConfigDataReview1->saveConfig('productribbon/mconnectreviewproduct/number_for_display_ribbon_review_product_hidden', $productlimitforReview, 'default', 0);
+  
+  } }                
+?>
+
+
+<?php if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+<div class="category-products">
+    <?php echo $this->getToolbarHtml() ?>
+    <?php // List mode ?>
+    <?php if($this->getMode()!='grid'): ?>
+    <?php $_iterator = 0; ?>
+    <ol class="products-list" id="products-list">
+    <?php foreach ($_productCollection as $_product): ?>
+        <li class="item<?php if( ++$_iterator == sizeof($_productCollection) ): ?> last<?php endif; ?>">
+               
+                <?php 
+                    //get sku 
+                    $listSku = $_product->getsku();
+                    //current date
+                    $Now12 = time();
+                    $currntDate = date('Y-m-d', $Now12);
+                    $currntDateintime = strtotime($currntDate);
+                ?>
+               
+                <?php //new product ribbon 
+                if($getnewproductsRibbon == 1 && count($Npc) > 0){
+                     
+                    if(in_array($listSku, $Npc)){
+                        
+                        //save sku for new product
+                        if(!in_array($listSku, $modelSku)){
+                        $savenewproduct0 = Mage::getModel('productribbon/productribbon')
+                        ->setSku($listSku)       
+                        ->setProductDate($currntDate)
+                        ->save();
+                        }
+                        
+                                                 
+                        
+                    //get date from model for new products
+                    $newproductsdate = Mage::getModel('productribbon/productribbon')->getCollection();
+                    $filtertoSku = $newproductsdate->addFieldToFilter('sku', $listSku);
+                    $Datacount = $filtertoSku->count();
+                    
+                     
+                    if($Datacount > 0){
+                        $getFilterData = $newproductsdate->getData();
+                        
+                        if(isset($getFilterData[0])){
+                        $productDate = $getFilterData[0]['product_date']; 
+                        $productDatetoTime = strtotime($productDate);
+                        
+                         //admin day convert to time for new products
+                        $newproductday = (60*60*24*$adminDayFornewproduct);
+                        $additionofDaysForNew = $productDatetoTime+$newproductday;
+                 ?>
+                        <?php if($currntDateintime >= $productDatetoTime && $currntDateintime <= $additionofDaysForNew){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getnewproductsimagename ?>" style="<?php if($adminStyleNew != ''){ echo $adminStyleNew; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                        }
+                       }
+                      }                
+                     } 
+                    }
+                ?>
+                
+                <?php //best selling product ribbon
+                if($getbestproductsRibbon == 1 && count($Bpc) > 0){
+                    if(in_array($listSku, $Bpc)){ 
+                    
+                       //save sku for best product
+                       if(!in_array($listSku, $modelSku1)){
+                        $savenewproduct1 = Mage::getModel('productribbon/productribbonbest')
+                        ->setSku($listSku)       
+                        ->setProductDate($currntDate)
+                        ->save();
+                        }
+
+                    //get model for best seller products
+                    $bestproductsdate = Mage::getModel('productribbon/productribbonbest')->getCollection();
+                    $filtertoSkubest = $bestproductsdate->addFieldToFilter('sku', $listSku);
+                    $Datacountbest = $filtertoSkubest->count();
+                    if($Datacountbest > 0){
+                        $getFilterDataBest = $bestproductsdate->getData();
+                        if(isset($getFilterDataBest[0])){
+                        $productDateBest = $getFilterDataBest[0]['product_date']; 
+                        $BestproductDatetoTime = strtotime($productDateBest);
+                    
+                        $bestproductday = (60*60*24*$adminDayForBestproduct);
+                        $additionofDaysForBest = $BestproductDatetoTime+$bestproductday;   
+                  ?>
+                        <?php if($currntDateintime >= $BestproductDatetoTime && $currntDateintime <= $additionofDaysForBest){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getbestproductsimagename ?>" style="<?php if($adminStyleBest != ''){ echo $adminStyleBest; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                        }
+                       }
+                      }
+                     }
+                    }
+                ?>
+            
+                <?php // special price products
+                $specialSpricelabel = $_product->getSpecialPrice();
+                if($getsalesproductsRibbon == 1){
+                    if($specialSpricelabel != ''){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getsalesproductsimagename ?>" style="<?php if($adminStyleSales != ''){ echo $adminStyleSales; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                    }
+                }
+                ?>
+                        
+                <?php //review products
+                if($getreviewproductsRibbon == 1 && count($Rpc)> 0){
+                    
+                    if(in_array($listSku, $Rpc)){ 
+                    
+                       //save sku for best product
+                       if(!in_array($listSku, $modelSku2)){
+                        $savenewproduct2 = Mage::getModel('productribbon/productribbonrivewed')
+                        ->setSku($listSku)       
+                        ->setProductDate($currntDate)
+                        ->save();
+                        }
+
+                    //get model for most Reviewed products
+                    $reviewproductsdate = Mage::getModel('productribbon/productribbonrivewed')->getCollection();
+                    $filtertoSkuReview = $reviewproductsdate->addFieldToFilter('sku', $listSku);
+                    $DatacountReview = $filtertoSkuReview->count();
+                    if($DatacountReview > 0){
+                        $getFilterDataReview = $reviewproductsdate->getData();
+                        if(isset($getFilterDataReview[0])){
+                        $productDateReview = $getFilterDataReview[0]['product_date']; 
+                        $ReviewproductDatetoTime = strtotime($productDateReview);
+                    
+                        $Reviewproductday = (60*60*24*$adminDayForReviewproduct);
+                        $additionofDaysForReview = $ReviewproductDatetoTime+$Reviewproductday;   
+                  ?>
+                        <?php if($currntDateintime >= $ReviewproductDatetoTime && $currntDateintime <= $additionofDaysForReview){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getreviewproductsimagename ?>" style="<?php if($adminStyleReview != ''){ echo $adminStyleReview; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                        }
+                       }
+                      }
+                     }
+                    }
+                
+                ?>
+            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135); ?>" width="135" height="135" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+            <?php // Product description ?>
+            <div class="product-shop">
+                <div class="f-fix">
+                    <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                    <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped; ?>"><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></a></h2>
+                    <?php if($_product->getRatingSummary()): ?>
+                    <?php echo $this->getReviewsSummaryHtml($_product) ?>
+                    <?php endif; ?>
+                    <?php echo $this->getPriceHtml($_product, true) ?>
+                    <?php if($_product->isSaleable()): ?>
+                        <p><button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button></p>
+                    <?php else: ?>
+                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                    <div class="desc std">
+                        <?php echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
+                        <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped ?>" class="link-learn"><?php echo $this->__('Learn More') ?></a>
+                    </div>
+                    <ul class="add-to-links">
+                        <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                            <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                        <?php endif; ?>
+                        <?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                            <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    <?php endforeach; ?>
+    </ol>
+    <script type="text/javascript">decorateList('products-list', 'none-recursive')</script>
+
+    <?php else: ?>
+
+    <?php // Grid Mode ?>
+
+    <?php $_collectionSize = $_productCollection->count() ?>
+    <?php $_columnCount = $this->getColumnCount(); ?>
+    <?php $i=0; foreach ($_productCollection as $_product): ?>
+        <?php if ($i++%$_columnCount==0): ?>
+        <ul class="products-grid">
+        <?php endif ?>
+            <li class="item<?php if(($i-1)%$_columnCount==0): ?> first<?php elseif($i%$_columnCount==0): ?> last<?php endif; ?>">
+               
+               <?php 
+                    //get sku 
+                    $listSku = $_product->getsku();
+                    //current date
+                    $Now12 = time();
+                    $currntDate = date('Y-m-d', $Now12);
+                    $currntDateintime = strtotime($currntDate);
+                ?>
+               
+                <?php //new product ribbon 
+                if($getnewproductsRibbon == 1){
+                    if(in_array($listSku, $Npc)){
+                        
+                        //save sku for new product
+                        if(!in_array($listSku, $modelSku)){
+                        $savenewproduct0 = Mage::getModel('productribbon/productribbon')
+                        ->setSku($listSku)       
+                        ->setProductDate($currntDate)
+                        ->save();
+                        }
+                        
+                                                 
+                        
+                        
+                    //get date from model for new products
+                    $newproductsdate = Mage::getModel('productribbon/productribbon')->getCollection();
+                    $filtertoSku = $newproductsdate->addFieldToFilter('sku', $listSku);
+                    $Datacount = $filtertoSku->count();
+                    if($Datacount > 0){
+                        $getFilterData = $newproductsdate->getData();
+                        if(isset($getFilterData[0])){
+                        $productDate = $getFilterData[0]['product_date']; 
+                        $productDatetoTime = strtotime($productDate);
+                        
+                         //admin day convert to time for new products
+                        $newproductday = (60*60*24*$adminDayFornewproduct);
+                        $additionofDaysForNew = $productDatetoTime+$newproductday;
+                 ?>
+                        <?php if($currntDateintime >= $productDatetoTime && $currntDateintime <= $additionofDaysForNew){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getnewproductsimagename ?>" style="<?php if($adminStyleNew != ''){ echo $adminStyleNew; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                        }
+                       }
+                      }                
+                     } 
+                    }
+                ?>
+                
+                <?php //best selling product ribbon
+                if($getbestproductsRibbon == 1){
+                    if(in_array($listSku, $Bpc)){ 
+                    
+                       //save sku for best product
+                       if(!in_array($listSku, $modelSku1)){
+                        $savenewproduct1 = Mage::getModel('productribbon/productribbonbest')
+                        ->setSku($listSku)       
+                        ->setProductDate($currntDate)
+                        ->save();
+                        }
+
+                    //get model for best seller products
+                    $bestproductsdate = Mage::getModel('productribbon/productribbonbest')->getCollection();
+                    $filtertoSkubest = $bestproductsdate->addFieldToFilter('sku', $listSku);
+                    $Datacountbest = $filtertoSkubest->count();
+                    if($Datacountbest > 0){
+                        $getFilterDataBest = $bestproductsdate->getData();
+                        if(isset($getFilterDataBest[0])){
+                        $productDateBest = $getFilterDataBest[0]['product_date']; 
+                        $BestproductDatetoTime = strtotime($productDateBest);
+                    
+                        $bestproductday = (60*60*24*$adminDayForBestproduct);
+                        $additionofDaysForBest = $BestproductDatetoTime+$bestproductday;   
+                  ?>
+                        <?php if($currntDateintime >= $BestproductDatetoTime && $currntDateintime <= $additionofDaysForBest){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getbestproductsimagename ?>" style="<?php if($adminStyleBest != ''){ echo $adminStyleBest; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                        }
+                       }
+                      }
+                     }
+                    }
+                ?>
+            
+                <?php // special price products
+                $specialSpricelabel = $_product->getSpecialPrice();
+                if($getsalesproductsRibbon == 1){
+                    if($specialSpricelabel != ''){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getsalesproductsimagename ?>" style="<?php if($adminStyleSales != ''){ echo $adminStyleSales; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                    }
+                }
+                ?>
+                        
+                <?php //review products
+                if($getreviewproductsRibbon == 1){
+                    
+                    if(in_array($listSku, $Rpc)){ 
+                    
+                       //save sku for best product
+                       if(!in_array($listSku, $modelSku2)){
+                        $savenewproduct2 = Mage::getModel('productribbon/productribbonrivewed')
+                        ->setSku($listSku)       
+                        ->setProductDate($currntDate)
+                        ->save();
+                        }
+
+                    //get model for most Reviewed products
+                    $reviewproductsdate = Mage::getModel('productribbon/productribbonrivewed')->getCollection();
+                    $filtertoSkuReview = $reviewproductsdate->addFieldToFilter('sku', $listSku);
+                    $DatacountReview = $filtertoSkuReview->count();
+                    if($DatacountReview > 0){
+                        $getFilterDataReview = $reviewproductsdate->getData();
+                        if(isset($getFilterDataReview[0])){
+                        $productDateReview = $getFilterDataReview[0]['product_date']; 
+                        $ReviewproductDatetoTime = strtotime($productDateReview);
+                    
+                        $Reviewproductday = (60*60*24*$adminDayForReviewproduct);
+                        $additionofDaysForReview = $ReviewproductDatetoTime+$Reviewproductday;   
+                  ?>
+                        <?php if($currntDateintime >= $ReviewproductDatetoTime && $currntDateintime <= $additionofDaysForReview){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getreviewproductsimagename ?>" style="<?php if($adminStyleReview != ''){ echo $adminStyleReview; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                        }
+                       }
+                      }
+                     }
+                    }
+                
+                ?>
+                <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135); ?>" width="135" height="135" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" /></a>
+                <h2 class="product-name"><a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a></h2>
+                <?php if($_product->getRatingSummary()): ?>
+                <?php echo $this->getReviewsSummaryHtml($_product, 'short') ?>
+                <?php endif; ?>
+                <?php echo $this->getPriceHtml($_product, true) ?>
+                <div class="actions">
+                    <?php if($_product->isSaleable()): ?>
+                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="button btn-cart" onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>')"><span><span><?php echo $this->__('Add to Cart') ?></span></span></button>
+                    <?php else: ?>
+                        <p class="availability out-of-stock"><span><?php echo $this->__('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                    <ul class="add-to-links">
+                        <?php if ($this->helper('wishlist')->isAllow()) : ?>
+                            <li><a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
+                        <?php endif; ?>
+                        <?php if($_compareUrl=$this->getAddToCompareUrl($_product)): ?>
+                            <li><span class="separator">|</span> <a href="<?php echo $_compareUrl ?>" class="link-compare"><?php echo $this->__('Add to Compare') ?></a></li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </li>
+        <?php if ($i%$_columnCount==0 || $i==$_collectionSize): ?>
+        </ul>
+        <?php endif ?>
+        <?php endforeach ?>
+        <script type="text/javascript">decorateGeneric($$('ul.products-grid'), ['odd','even','first','last'])</script>
+    <?php endif; ?>
+
+    <div class="toolbar-bottom">
+        <?php echo $this->getToolbarHtml() ?>
+    </div>
+</div>
+<?php endif; ?>

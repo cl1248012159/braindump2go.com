@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config>
+  <sections><!-- 区域(Section) 标签 -->
+    <customer translate="label" module="test"><!-- 区域名: 声明你想放在哪个区域里 -->
+      <groups><!-- 组(Group) 标签 -->
+        <create_account translate="label"><!-- 组名: 声明你想放在哪个组里 -->
+          <fields><!-- 文本域 -->
+            <slider translate="label">
+              <label>Download Link Lifetime (days)</label>
+              <frontend_type>text</frontend_type>
+              <!-- input 的类型为 text -->
+              <sort_order>3</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </slider>
+          </fields>
+        </create_account>
+      </groups>
+    </customer>
+  </sections>
+</config>

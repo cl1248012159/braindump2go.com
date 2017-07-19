@@ -1,0 +1,168 @@
+<?php echo $this->getChildHtml('productribbon') ?>
+<?php     
+            $_product = Mage::registry('current_product');
+            $productViewSku = $_product->getSku(); 
+            //var_dump($productViewSku);
+            
+            //exit;
+            $NowView = time(); 
+            $CrntDate = date('Y-m-d', $NowView);
+            $currntDateintimeView = strtotime($CrntDate);
+            
+            //get imagepath
+            $getnewproductsimagenameview = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/new_products_ribbon');
+            $getbestproductsimagename = Mage::getStoreConfig('productribbon/mconnectbestproduct/best_products_ribbon');
+            $getsalesproductsimagename = Mage::getStoreConfig('productribbon/mconnectsalesproduct/sales_products_ribbon');
+            $getreviewproductsimagename = Mage::getStoreConfig('productribbon/mconnectreviewproduct/review_products_ribbon');
+           
+            //get value yes/no for displayed ribbon
+            //$getconfigNewproductgeneral = Mage::getStoreConfig('productribbon/mconnectgeneral/display_product_label_on_view');
+            $getconfigNewproduct = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/display_on_new_product_label_on_view');
+            $getconfigBestproduct = Mage::getStoreConfig('productribbon/mconnectbestproduct/display_on_best_product_label_on_view');
+            $getconfigSalesproduct = Mage::getStoreConfig('productribbon/mconnectsalesproduct/display_on_sales_product_label_on_view');
+            $getconfigReviewedproduct = Mage::getStoreConfig('productribbon/mconnectreviewproduct/display_on_sales_product_label_on_view');
+            
+            //get days from admin
+            $adminDayFornewproduct = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/number_for_display_ribbon_new');
+            $adminDayForBestproduct = Mage::getStoreConfig('productribbon/mconnectbestproduct/number_for_display_ribbon_best');
+            $adminDayForReviewproduct = Mage::getStoreConfig('productribbon/mconnectreviewproduct/number_for_display_ribbon_review');
+            
+            //get style from admin for ribbon
+            $adminStyleNew = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/style_for_logo_new_Ribbon_view');
+            $adminStyleBest = Mage::getStoreConfig('productribbon/mconnectbestproduct/style_for_best_Ribbon_view');
+            $adminStyleSales = Mage::getStoreConfig('productribbon/mconnectsalesproduct/style_for_sales_Ribbon_view');
+            $adminStyleReview = Mage::getStoreConfig('productribbon/mconnectreviewproduct/style_for_review_Ribbon_view');
+            
+            //get enable/disable value from store config
+            $getnewproductsRibbon = Mage::getStoreConfig('productribbon/mconnectnewproductarrival/new_products_module_enable_disable');
+            $getbestproductsRibbon = Mage::getStoreConfig('productribbon/mconnectbestproduct/best_products_module_enable_disable');
+            $getsalesproductsRibbon = Mage::getStoreConfig('productribbon/mconnectsalesproduct/sales_products_module_enable_disable');
+            $getreviewproductsRibbon = Mage::getStoreConfig('productribbon/mconnectreviewproduct/review_products_module_enable_disable');
+
+            ?>
+            
+            <?php //get model for new product    
+            if($getnewproductsRibbon == 1 &&  $getconfigNewproduct ==1){
+            
+            //get model for each sku date
+             $newProductDate = Mage::getModel('productribbon/productribbon')->getCollection();
+             $newProductDate->addFieldToFilter('view_status', 1);
+             $filterSku = $newProductDate->addFieldToFilter('sku', $productViewSku);
+             $countView = $filterSku->count();
+             if($countView > 0){
+             $filterDateView = $newProductDate->getData();
+             if(isset($filterDateView[0])){
+             $ecahproductDate = $filterDateView[0]['product_date'];   
+             $NewecahproductDateTime = strtotime($ecahproductDate);
+             
+            //get model for collection of sku    
+            $newProductView = Mage::getModel('productribbon/productribbon')
+            ->getCollection();
+            $newProductView->addFieldToFilter('view_status', 1);
+            $newProductView->getData();
+            $NpvSku = array();
+            foreach($newProductView as $Npv){
+                $NpvSku[] = $Npv['sku'];
+            }
+            
+            //admin day convert to time for new products
+            $newproductday = (60*60*24*$adminDayFornewproduct);
+            $additionofDaysForNew = $NewecahproductDateTime+$newproductday;
+             
+            if(in_array($productViewSku, $NpvSku)){?>
+            <?php if($currntDateintimeView >= $NewecahproductDateTime && $currntDateintimeView <= $additionofDaysForNew){ ?>
+            <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getnewproductsimagenameview ?>" style="<?php if($adminStyleNew != ''){ echo $adminStyleNew; }else{ ?>height: 30px;position: absolute;width: 30px; 
+             <?php }?>">
+            <?php
+               } 
+              } 
+             }
+            } 
+           }
+          ?>
+            
+          <?php //get model for best seller
+            if($getbestproductsRibbon == 1 && $getconfigBestproduct == 1){
+                
+                    //get model for sku
+                    $betsProductView = Mage::getModel('productribbon/productribbonbest')
+                    ->getCollection();
+                    $betsProductView->addFieldToFilter('view_status', 1);
+                    $betsProductView->getData();
+                    $BpvSku = array();
+                    foreach($betsProductView as $Bpv){
+                        $BpvSku[] = $Bpv['sku'];
+                    }
+
+                    //get model for each products date
+                    $bestproductsdate = Mage::getModel('productribbon/productribbonbest')->getCollection();
+                    $bestproductsdate->addFieldToFilter('view_status', 1);
+                    $filtertoSkubest = $bestproductsdate->addFieldToFilter('sku', $productViewSku);
+                    $Datacountbest = $filtertoSkubest->count();
+                    if($Datacountbest > 0){
+                        $getFilterDataBest = $bestproductsdate->getData();
+                        if(isset($getFilterDataBest[0])){
+                        $productDateBest = $getFilterDataBest[0]['product_date']; 
+                        $BestproductDatetoTime = strtotime($productDateBest);
+                    
+                        $bestproductday = (60*60*24*$adminDayForBestproduct);
+                        $additionofDaysForBest = $BestproductDatetoTime+$bestproductday;   
+              ?>
+                        <?php if(in_array($productViewSku, $BpvSku)); ?>
+                        <?php if($currntDateintimeView >= $BestproductDatetoTime && $currntDateintimeView <= $additionofDaysForBest){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getbestproductsimagename ?>" style="<?php if($adminStyleBest != ''){ echo $adminStyleBest; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                        }
+                       }
+                      }
+                     }
+            
+                    ?>
+           
+            <?php // special price products
+                $specialSpricelabel = $_product->getSpecialPrice();
+                if($getsalesproductsRibbon == 1 && $getconfigSalesproduct == 1){
+                    if($specialSpricelabel != ''){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getsalesproductsimagename ?>" style="<?php if($adminStyleSales != ''){ echo $adminStyleSales; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                    }
+                }
+            ?>
+                        
+            <?php //review products
+            if($getreviewproductsRibbon == 1 && $getconfigReviewedproduct == 1){
+                
+                //get model for sku
+                $ReviewedProductSku = Mage::getModel('productribbon/productribbonrivewed')
+                ->getCollection();
+                $ReviewedProductSku->addFieldToFilter('view_status', 1);
+                $ReviewedProductSku->getData();
+                $filterViewSku = array();
+                foreach($ReviewedProductSku as $Rps){
+                    $filterViewSku[] = $Rps['sku'];
+                }
+                
+                $reviewproductsdate = Mage::getModel('productribbon/productribbonrivewed')->getCollection();
+                $reviewproductsdate->addFieldToFilter('view_status', 1);
+                    $filtertoSkuReview = $reviewproductsdate->addFieldToFilter('sku', $productViewSku);
+                    $DatacountReview = $filtertoSkuReview->count();
+                    if($DatacountReview > 0){
+                        $getFilterDataReview = $reviewproductsdate->getData();
+                        if(isset($getFilterDataReview[0])){
+                        $productDateReview = $getFilterDataReview[0]['product_date']; 
+                        $ReviewproductDatetoTime = strtotime($productDateReview);
+                    
+                        $Reviewproductday = (60*60*24*$adminDayForReviewproduct);
+                        $additionofDaysForReview = $ReviewproductDatetoTime+$Reviewproductday;   
+            ?>
+                        <?php if(in_array($productViewSku, $filterViewSku)){ ?>
+                        <?php if($currntDateintimeView >= $ReviewproductDatetoTime && $currntDateintimeView <= $additionofDaysForReview){ ?>
+                        <img src="<?php echo Mage::getBaseUrl('media').'m-connectRibbon/'.$getreviewproductsimagename ?>" style="<?php if($adminStyleReview != ''){ echo $adminStyleReview; }else{ ?>height: 30px;width: 30px<?php }?>">
+                        <?php
+                         }
+                        }
+                       }
+                      }
+                     }
+            
+                     ?>

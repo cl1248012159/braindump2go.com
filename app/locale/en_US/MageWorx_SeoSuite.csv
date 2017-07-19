@@ -1,0 +1,34 @@
+"<b>Template variables</b><br />[<i>attribute</i>] &mdash; e.g. [name], [price], [manufacturer], [color] &mdash; will be replaced with the respective product attribute value or removed if  value is not available<br />[<i>attribute1|attribute2|...</i>] &mdash; e.g. [manufacturer|brand] &mdash; if the first attribute value is not available for the product the second will be used and so on untill it finds a value<br />[<i>prefix</i> {<i>attribute</i>} <i>suffix</i>] or<br />[<i>prefix</i> {<i>attribute1|attribute2|...</i>} <i>suffix</i>] &mdash; e.g. [({color} color)] &mdash; if an attribute value is available it will be prepended with prefix and appended with suffix, either prefix or suffix can be used alone<br />Additional variables available for Product Meta Title only: [category], [categories]<br /><b>Examples</b><br /><u>Product URL Key</u><br />[name] [by {manufacturer|brand}] [{color} color] [for {price}] will be transformed into<br />htc-touch-diamond-by-htc-black-color-for-517-50<br /><u>Product Meta Title</u><br />[name] [by {manufacturer|brand}] [({color} color)] [for {price}] [in {categories}] will be transformed into<br />HTC Touch Diamond by HTC (Black color) for ˆ 517.50 in Cell Phones - Electronics","<b>Template variables</b><br />[<i>attribute</i>] &mdash; e.g. [name], [price], [manufacturer], [color] &mdash; will be replaced with the respective product attribute value or removed if  value is not available<br />[<i>attribute1|attribute2|...</i>] &mdash; e.g. [manufacturer|brand] &mdash; if the first attribute value is not available for the product the second will be used and so on untill it finds a value<br />[<i>prefix</i> {<i>attribute</i>} <i>suffix</i>] or<br />[<i>prefix</i> {<i>attribute1|attribute2|...</i>} <i>suffix</i>] &mdash; e.g. [({color} color)] &mdash; if an attribute value is available it will be prepended with prefix and appended with suffix, either prefix or suffix can be used alone<br />Additional variables available for Product Meta Title only: [category], [categories]<br /><b>Examples</b><br /><u>Product URL Key</u><br />[name] [by {manufacturer|brand}] [{color} color] [for {price}] will be transformed into<br />htc-touch-diamond-by-htc-black-color-for-517-50<br /><u>Product Meta Title</u><br />[name] [by {manufacturer|brand}] [({color} color)] [for {price}] [in {categories}] will be transformed into<br />HTC Touch Diamond by HTC (Black color) for ˆ 517.50 in Cell Phones - Electronics"
+Add Canonical URL Meta Header,Add Canonical URL Meta Header
+Add Trailing Slash,Add Trailing Slash
+Can be either a full action name or a request path. Wildcard allowed<br/><b>Examples</b>:<br/>review_product_*<br/>review/product/*<br/>rss_*<br/>rss/*,Can be either a full action name or a request path. Wildcard allowed<br/><b>Examples</b>:<br/>review_product_*<br/>review/product/*<br/>rss_*<br/>rss/*
+Canonical URL,Canonical URL
+Canonical URL Meta Header will not be added for these pages,Canonical URL Meta Header will not be added for these pages
+Checkout Pages,Checkout Pages
+Contact Us Page,Contact Us Page
+Customer Account Pages,Customer Account Pages
+For use with <b>Use categories path for product URLs</b> setting<br/><b>Use Default</b> will use categories path related to the current categories path for product URL<br/><b>Use Longest</b> will use the longest categories path for product URL<br/><b>Use Shortest</b> will use the shortest categories path for product URL,For use with <b>Use categories path for product URLs</b> setting<br/><b>Use Default</b> will use categories path related to the current categories path for product URL<br/><b>Use Longest</b> will use the longest categories path for product URL<br/><b>Use Shortest</b> will use the shortest categories path for product URL
+Ignore Pages,Ignore Pages
+Leave blank to use Product Meta Title Template,Leave blank to use Product Meta Title Template
+Leave blank to use Product URL Key Template,Leave blank to use Product URL Key Template
+MageWorx &gt; SEO Suite,MageWorx &gt; SEO Suite
+"NOINDEX, FOLLOW Robots Meta Header For Additional Pages","NOINDEX, FOLLOW Robots Meta Header For Additional Pages"
+"NOINDEX, FOLLOW Robots Meta Header For Pages Without Content","NOINDEX, FOLLOW Robots Meta Header For Pages Without Content"
+Product Canonical URL,Product Canonical URL
+Product Compare Pages,Product Compare Pages
+Product Meta Title,Product Meta Title
+Product Meta Title Template. See below for details,Product Meta Title Template. See below for details
+Product Review Pages,Product Review Pages
+Product Short Meta Description,Product Short Meta Description
+Product URL Key,Product URL Key
+Product URL Key and Meta Title Templates,Product URL Key and Meta Title Templates
+Product URL Key Template. See below for details,Product URL Key Template. See below for details
+Robots,Robots
+RSS Feeds,RSS Feeds
+Search Pages,Search Pages
+Send Product Pages,Send Product Pages
+SEO Suite,SEO Suite
+Tag Pages,Tag Pages
+Use Config,Use Config
+Use product short description for Description Meta Tag instead of full description,Use product short description for Description Meta Tag instead of full description
+Wishlist Pages,Wishlist Pages

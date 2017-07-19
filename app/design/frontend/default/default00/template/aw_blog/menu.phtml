@@ -1,0 +1,20 @@
+<div class="block block-blog">
+    <div class="block-title">
+        <span class="blog_home_title">What Our Customers Are Saying</span>
+    </div>
+	<div class="block-content">
+<?php if ($posts = $this->getRecent()): ?>
+	<div class="menu-recent">
+		<ul>
+		<?php foreach ($posts as $post): ?>
+			<li><a href="<?php echo $post->getAddress(); ?>" class="recent-title"><?php echo $post->getTitle();?></a></li>
+			<li class="hreview"><b>Posted: </b><?php echo $post->getCreatedTime(); ?></li>
+			<li class="hreview"><b>Reviewer: </b><?php echo $post->getUser(); ?></li>
+			<li class="short_content"><?php echo $post->getShortContent(); ?></li>
+		<?php endforeach; ?>
+       	</ul>
+	</div>	
+<?php endif; ?>
+		
+	</div>
+</div>

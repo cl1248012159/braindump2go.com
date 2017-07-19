@@ -1,0 +1,20 @@
+<!--<?xml version="1.0"?>
+<layout version="0.1.0">
+	<catalog_product_view>
+        <reference name="content">
+            <action method="setTemplate">
+            	<template>downloadable/customer/products/list.phtml</template>
+            </action>
+        </reference>
+    </catalog_product_view>     
+</layout>	-->
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<catalog_product_view>
+        <reference name="product.info">
+            <action method="setTemplate">
+            	<template>downloadablelinklifetime/catalog/product/list.phtml</template>
+            </action>
+        </reference>
+    </catalog_product_view>     
+</layout>	

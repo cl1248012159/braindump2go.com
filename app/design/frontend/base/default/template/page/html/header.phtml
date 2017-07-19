@@ -1,0 +1,138 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+<div class="header-container">	
+	<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top_ad')->toHtml() ?>
+    <div class="header" id="header">
+		<div class="inner-header">
+			<div class="logo">
+				<?php if ($this->getIsHomePage()):?>
+                
+			
+				 <a id="homepage" href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo">
+				 <img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" />
+				 </a>
+				 
+       		<?php else:?>
+        		<a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo">
+				<strong><?php echo $this->getLogoAlt() ?></strong>
+				<img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" />
+				</a>
+        	<?php endif?>
+		  </div>
+          <div class="info">
+                 <div class="menu">
+                    <ul>
+                        <li class="liselected">
+                             <a href="/index.php">Home</a>
+                        </li>
+                        <li>
+                             <a rel="nofollow" href="<?php echo $this->getBaseUrl()?>about-us.html">About Us</a>
+                        </li>
+                        <li>
+                              <a rel="nofollow" href="<?php echo $this->getBaseUrl()?>">Guarantee</a>
+                        </li>
+                        <li>
+                              <a rel="nofollow" href="<?php echo $this->getBaseUrl()?>faq.html">FAQs</a>
+                        </li>
+                        <li>
+                             <a rel="nofollow" href="<?php echo $this->getBaseUrl()?>contact-us.html">Contact Us</a>
+                        </li>
+                    </ul>
+                 </div>
+                 <div class="other-info">
+                        <div class="live-chat">
+                             <div id="scH46n" style="display:inline">
+                                    <a onclick="psH46now(); return false;" href="#">
+                                    <img border="0" src="http://www.test4prep.com/images/live_chat.png" name="psH46nimage">
+                                    </a>
+                            </div>
+                        </div> <?php if (!Mage::getSingleton("customer/session")->isLoggedIn()){ ?>
+                        <div class="login-register">
+                       
+                                <a rel="nofollow" href="<?php echo $this->getBaseUrl()?>customer/account/login/">Login</a>
+                                 <span style="float:right;">
+                                    <a rel="nofollow" href="<?php echo $this->getBaseUrl()?>customer/account/create">Register</a>
+                                </span>
+                        
+                        </div>
+                        <?php }else{?>
+                        <div class="login-logout">
+                        <a rel="nofollow" title="Log Out" href="/customer/account/logout/"><font style="font-size:13px">Log Out</font></a>
+                            
+                            </div>
+                        <?php }?>
+                        <div class="mcafee">
+                            <a href="" target="_blank">
+                                  <img src="http://images.scanalert.com/meter/www.mcafee.com/13.gif"/>
+                            </a>
+                        </div>
+                 </div>
+                 
+          </div>
+          
+          <div class="nav-bar">
+               <?php echo $this->getChildHtml('topnav') ?>
+           </div>
+           <div class="header-search">
+               <?php echo $this->getChildHtml('topSearch') ?>
+           </div>  
+           <div class="header-cart">
+                <div class="c_img"><img width="70" height="69" style=" margin-top:-15px; position:absolute;" alt="Cart" src="/skin/frontend/default/petter/images/cart_icon.png"/>
+                </div>
+                <div style="margin-left:70px;">
+                    <?php echo $this->getChildHtml('cart_sidebar') ?>
+                </div>
+          </div>                   
+	</div>
+         
+		<!--<div class="header_conton">
+		
+			
+			<div class="quick-access">
+				<a href="#" class="mcafee"><img src="http://images.scanalert.com/meter/www.mcafee.com/13.gif"/></a>
+				<div class="quick_top">
+				
+				<?php echo $this->getChildHtml('cart_sidebar') ?>
+				</div>
+            	
+				
+       		</div>
+		</div>
+		
+        
+        
+        <?php echo $this->getChildHtml('topContainer'); ?>-->
+    </div>
+</div>
+<!--<div class="topmenu">
+	<div class="topmenu_left"></div>
+		<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('topmenu ')->toHtml() ?>
+	<div class="topmenu_right"></div>
+</div>-->

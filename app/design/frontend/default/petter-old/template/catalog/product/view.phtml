@@ -1,0 +1,359 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+
+
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+
+<?php 
+		$excludeAttr = array();
+				$data = array();
+       
+        $attributes = $_product->getAttributes();
+        foreach ($attributes as $attribute) {
+            if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
+                $value = $attribute->getFrontend()->getValue($_product);
+
+                if (!$_product->hasData($attribute->getAttributeCode())) {
+                    $value = Mage::helper('catalog')->__('N/A');
+                } elseif ((string)$value == '') {
+                    $value = Mage::helper('catalog')->__('No');
+                } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
+                    $value = Mage::app()->getStore()->convertPrice($value, true);
+                }
+
+                if (is_string($value) && strlen($value)) {
+                    $data[$attribute->getAttributeCode()] = array(
+                        'label' => $attribute->getStoreLabel(),
+                        'value' => $value,
+                        'code'  => $attribute->getAttributeCode()
+                    );
+                }
+            }
+        }
+		
+				
+				
+				$cat_ids = $_product->getCategoryIds();
+				$level_1_cat_id = array();
+				$level_2_cat_id = array();
+				
+				foreach($cat_ids as $cat_id){				
+				$category_cat = Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($cat_id);
+				
+				if($category_cat->getLevel()==2){
+					$level_1_cat_id[] = $category_cat->getId();
+				}
+				
+				if($category_cat->getLevel()==3){
+					$level_2_cat_id[$category_cat->getParentCategory()->getId()] = $category_cat->getId();					
+				}
+				
+				}
+				
+				$level_1_cat =  Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($level_1_cat_id[0]);
+				$level_2_cat = Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($level_2_cat_id[$level_1_cat_id[0]]);				
+			
+				?>
+                        <p>
+                        <?php
+                           $sd1=$level_1_cat->getName();
+                          $sd2=$level_2_cat->getName();
+                         $sd3=$category_cat->getName();
+                        ?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+  <div id="products-list">
+     <div class="inner-products" style="position:relative;">
+    
+		
+			
+      <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+		  <div class="item-image">
+           <img width="223" height="292" title="<?php echo $_product->getName();?>" alt="" src="/skin/frontend/default/petter/images/product_img.png"/>
+         </div>
+	    <div class="item-info">
+            <ul>
+                <li>Exam Code: <?php echo $_product->getExamCode();?></li>
+                <li>Total Questions: <?php echo $_product->getQA()?></li>
+                <li>Last Updated: <?php echo $_product->getUpdated()?></li>
+                <li class="price"><?php echo $this->getPriceHtml($_product, true); ?></li>
+
+                        <style>#products-list .inner-products .item-info .special-price .price {font-size:20px;}</style>
+			<p style="color:#D30303;font-weight:bold;font-family:Arial;font-size:13px;padding:0;margin:-8px 0 5px 3px;">
+			<input type="checkbox" disabled="disabled" checked="checked" style="margin:0 0 4px 0;" /> PDF &nbsp;&nbsp; 
+			<input type="checkbox" checked="checked" disabled="disabled" style="margin:0 0 4px 0;" /> Test Software
+			</p>
+
+                <li style="height: 41px; margin-top:-15px">	<?php echo $this->getChildHtml('addtocart') ?></li>
+                <li style="height: 46px;"> <?php echo $this->getChildHtml('product_type_data') ?></li>
+            </ul>
+        </div>
+        <div class="item-features">
+             <div class="fec">
+            <div class="heading4">Vendor Name: <?php if(!isset($sd1)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;';}?></div>
+            <div class="heading4">Exam Name: <?php echo $_product->getExamName();?></div>
+            </div>
+            <div class="heading1">Features</div>
+            <ul>
+            <li>Complete collection of <?php echo $_product->getExamCode();?>'s most related Question and answers</li>
+            <li>Our <?php echo $_product->getExamCode();?> study material meets with the exact requirements of the examination syllabus </li>
+            <li>Immediate access to <?php echo $_product->getExamCode();?> Questions and Answers after buying</li>
+            <li>Check out our <?php echo $_product->getExamCode();?> sample in a new PDF format</li>
+            <li>24x7 online support facility by our experts to assist you if you get any difficulty </li>
+            </ul>
+        
+        </div>
+        
+                    <?php echo $this->getChildHtml('other');?>
+        
+                    <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                        <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                    <?php endif;?>
+ <div class="clearer"></div>
+                <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                    <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+                <?php endif;?>
+
+    </form>
+    <script type="text/javascript">
+    //<![CDATA[
+        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function(button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+
+                if (url) {
+                   form.action = url;
+                }
+                var e = null;
+                try {
+                    this.form.submit();
+                } catch (e) {
+                }
+                this.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+                if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);
+    //]]>
+    </script>
+    </div>
+</div>
+
+   
+<div id="products-text">
+        <div class="inner-text">
+             <h1><?php echo $_product->getExamCode();?> Exam Questions | Prepare for 
+                     <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> Exam</h1>
+                <div class="text-left">
+                    <p>What concerns people the most about  <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;';}?> <?php echo $_product->getExamCode();?> exams, is those questions that they never came across while preparing for their <?php echo $_product->getExamCode();?> exams. After going through the comprehensive package for <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;';}?> <?php echo $_product->getExamCode();?> exams that Braindump2go provides, you will feel your confidence levels rising naturally, as we cover all possible <?php echo $_product->getExamCode();?> exam questions along with their answers.</p>
+                    <p>
+                        When you begin answering the <?php echo $_product->getExamCode();?> tests, 
+                        there will be virtually no question that you don't know, and you will have the right answers to 
+                        everything thrown at you. Studying through our <?php echo $_product->getExamCode();?> training 
+                        materials gives you the confidence to face even the toughest <?php echo $_product->getExamCode();?> 
+                        certification test.
+                    </p>
+                    <p>
+                        In a typical <?php echo $_product->getExamCode();?> test, 
+                        you are asked question of various kinds in different formats. The most common types of questions are multiple choice questions, 
+                        procedural questions, case studies, theoretical questions and calculations among others. 
+                        After reviewing the <?php echo $_product->getExamCode();?> exam questions and answers form our training materials
+                    </p>
+                    <h2>
+                          <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;';}?> 
+                          <?php echo $_product->getExamCode();?> Exam Free Trial Demos
+                          </h2>
+                    <p>
+                        We respect your desire to make informed purchasing decisions, 
+                        and we know that you would like to preview our <?php echo $_product->getExamCode();?> 
+                        training materials. We provide you with a free demo of <?php echo $_product->getExamCode();?> Exam questionnaires with answers. 
+                        These free downloads are mere samples of what you can expect to find when you buy our 
+                        <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;';}?> <?php echo $_product->getExamCode();?> Exam product. 
+                        These free demos have convinced thousands of IT aspirants to just go for our actual <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;';}?> <?php echo $_product->getExamCode();?> Exam product. 
+                    </p>
+                    <br/>
+                    <br/>
+                </div>
+                
+                <div class="text-mid">
+                   <h4>Security & Confidentiality</h4>
+                       <p>Any information that you share about yourself with Braindump2go is strictly confidential, 
+                       and under no circumstances will it be shared with any third parties. 
+                       Our website is well-secured by McAfee Secure, a very reputable security protocol. 
+                       Any and all transactions made through our website by you are completely safe and hack-proof. 
+                       You can rest assured that your information won't be compromised in any manner.</p>
+                       <div class="related-exams">
+                            <h4>Related Exams</h4>
+                            <?php echo $this->getChildHtml('product.related') ?>   
+                       </div>
+                   <h4>Assurance at <?php echo $_product->getExamCode();?> Exam with 100% Refund Guarantee:</h4>
+                        <p>
+                            We at Braindump2go are committed to help you clear your <?php echo $_product->getExamCode();?> certification tests 
+                            with high scores. The chances of you failing to clear your <?php echo $_product->getExamCode();?> test, 
+                            after going through our comprehensive exam preparation materials is very bleak. 
+                            In an unfortunate event that it so happens, you can get back your money that you paid for 
+                            the entire <?php echo $_product->getExamCode();?> questions and answers package. In simple words, buying our products 
+                            is an all-win and no-loose deal for you. This will only result in enhancing your confidence 
+                            even further, which is not really an option given to customers anywhere else.
+                        </p>
+                </div>
+                <div class="text-right">
+                    <div class="related-certs">
+                       <h4>Popular Exams</h4>
+                       <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('hot-view-exam')->toHtml(); ?>
+                        
+                    </div>
+                    <div class="pop-block">
+                       <div class="inner-pop">
+                         <div id="popcerts" class="show-block" style="display: block;">
+                             <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('category-popular-cate')->toHtml(); ?>
+                         </div>
+                       </div>
+                    </div>
+               </div>
+<p>At Braindump2go, we provide thoroughly reviewed <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> <?php echo $_product->getExamCode();?> training resources which are the best for clearing 
+<?php echo $_product->getExamCode();?> test, and to get certified by <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?>. It is a best choice to accelerate your career as a 
+professional in the Information Technology industry. We are proud of our reputation of helping people 
+clear the <?php echo $_product->getExamCode();?> test in their very first attempts. Our success rates in the past two years have been 
+absolutely impressive, thanks to our happy customers who are now able to propel their careers in the fast lane.
+</p>
+<p>Braindump2go is the number one choice among IT professionals, especially the ones who are looking to climb up 
+the hierarchy levels faster in their respective organizations. <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> is the industry leader in information technology, 
+and getting certified by them is a guaranteed way to succeed with IT careers. We help you do exactly that with our 
+high quality <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> <?php echo $_product->getExamCode();?> training materials.</p>
+<p><?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> is omnipresent all around the world, and the business and software solutions provided by them are being 
+embraced by almost all the companies. They have helped in driving thousands of companies on the sure-shot path of success. Comprehensive knowledge of <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> products is considered a very important qualification, and the professionals certified by them are highly valued in all organizations.</p>
+<p>After you have reviewed our training materials for <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> certifications tests, you will have a clear idea about 
+how much you know, and how much you don't. After having learned thoroughly from these materials, you will be able 
+to clear the exams in the very first attempt.</p>
+<p>At Braindump2go, experts watch out constantly for all updates for <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> exams, and ensure that all possible questions 
+that you could face at the exams are included in our materials, and there will be no unknowns. </p>
+<p>In order to make you feel totally comfortable during the tests, we present <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> <?php echo $_product->getExamCode();?> questions and answers very
+ similarly to what you face during the test. If you succeed to pass, your will find your career taking the right 
+ directions, and if you don't, you still get back the money that you paid us for the <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> <?php echo $_product->getExamCode();?> exam preparation 
+ materials. Make use of this golden opportunity today.</p>
+<p>Also, the <?php echo $_product->getExamCode();?> exam materials that we provide are not chained to your desktop or laptop. You can copy it on 
+to a CD or a flash drive and carry it wherever you want, so that you can study for your <?php echo $_product->getExamCode();?> exams 
+regardless of where you are, and at any given time.</p>
+</div>
+   
+</div>
+
+
+
+<div id="products-bottom">
+ <div class="inner-bottom">
+    <div class="bottom-left">
+             <h4>Reliable Customer Service</h4>
+         <p>
+            Our relationship with you doesn't begin and end with your monetary transaction with us. 
+            In case you have issues in finding or using any product be it related to <?php echo $_product->getExamCode();?>  Exam or other <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1; echo '&nbsp;'; echo $sd2; }?> certifications,
+             our friendly support staff will assist you promptly whenever you contact us.
+         </p>
+    </div>
+    <div class="bottom-mid">
+            <h4>Popular <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1;}?> Exams</h4>
+            <?php if(!isset($sd1)){
+                   $category_id=$category_cat->getId();
+                }else{
+                    $category_id=$level_1_cat->getId();
+                }
+                ?>
+                <?php
+        $products = Mage::getModel('catalog/category')->load($category_id)
+    ->getProductCollection()
+    ->addAttributeToSelect('*')
+    ->addAttributeToFilter('status', 1)
+    ->addAttributeToFilter('hot_product', 1)
+    ->addAttributeToFilter('visibility', 4);
+?>
+              <ul>
+              <?php $i=0;?>
+              <?php foreach($products as $product):?>
+              <?php $i++;?>
+              <li>
+                 <a href="<?php echo $product->getUrlKey()?>.html"><?php echo $product->getSku(); ?></a>
+              </li>
+              <?php if($i>=20){break;}?>
+              <?php endforeach;?>
+              </ul>  
+    </div>
+    <div class="bottom-right">
+            <h4>Easy To Use <?php echo $_product->getExamCode()?> Product</h4>
+            <p>
+                In addition to ensuring that you are provided with only the best and most updated <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1;}?> <?php echo $_product->getExamCode();?>  
+                training materials, we also want you to be able to access them easily, whenever you want.
+                 We provide all our <?php if(!isset($sd1) && !isset($sd2)){?><?php echo $sd3;?><?php }else{echo $sd1;}?> <?php echo $_product->getExamCode();?>  exam training material in PDF format, which is a very common 
+                 format found in all computers and gadgets. Regardless of whichever computer you have, 
+                 you just need to download one of the many PDF readers that are available for free.
+                 </p>
+    </div>
+</div>
+</div>

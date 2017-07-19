@@ -1,0 +1,111 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Shoping cart sidebar
+ *
+ * @see Mage_Checkout_Block_Cart_Sidebar
+ */
+
+?>
+<style type="text/css">
+.mininav {
+width: 419px;
+margin: 1px 0 0 0;
+}
+.quick-access {
+	width: 600px;
+}
+.quick-access .block-cart {
+	background: none;
+	border: 0;
+	margin: 0;
+	width: 180px;
+	height: auto;
+}
+.quick-access .block-cart .block-content {
+	margin: 0;
+	width: auto;
+	height: 20px;
+	line-height: 20px;
+}
+.quick-access .block-cart .summary {
+	width: auto;
+	line-height: 20px;
+}
+.quick-access .block-cart .summary a {
+	color: #29517A;
+}
+.mini-products-list {
+	width: 200px;
+	top: 20px;
+	right: 0px;
+}
+.block .empty {
+	padding: 0px 9px;
+}
+.item-options {display:none;}
+</style>
+<?php if ($this->getIsNeedToDisplaySideBar()):?>
+<script type="text/javascript">
+function show_recetlyadd(){
+	document.getElementById('cart-sidebar').style.display="block";
+}
+function hide_recetlyadd(){
+	document.getElementById('cart-sidebar').style.display="none";
+}
+</script>
+<div class="block block-cart">
+    <?php $_cartQty = $this->getSummaryCount() ?>
+    <div class="block-content" onmouseout="hide_recetlyadd()">
+    <?php if ($_cartQty>0): ?>
+        <div class="summary">
+            <?php if ($_cartQty==1): ?>
+                <p class="amount" onmouseover="show_recetlyadd()" ><?php echo $this->__('My Cart: <a href="%s">1 Item</a>', $this->getUrl('checkout/cart')) ?></p>
+            <?php else: ?>
+                <p class="amount" onmouseover="show_recetlyadd()"><?php echo $this->__('My Cart: <a href="%s">%s Items</a>', $this->getUrl('checkout/cart'), $_cartQty) ?></p>
+            <?php endif ?>
+        </div>
+    <?php endif ?>
+	
+    <?php //if($_cartQty && $this->isPossibleOnepageCheckout()): ?>
+         <button type="button" style="background: url(/skin/frontend/default/default/bg/checkout-button.gif) 0 0 no-repeat;float:left;height:22px;width:100px;" title="<?php echo $this->__('Checkout') ?>" class="button sidebar_checkout" onclick="setLocation('<?php echo $this->getCheckoutUrl() ?>')"></button>
+    <?php //endif ?>
+	
+    <?php $_items = $this->getRecentItems() ?>
+    <?php if(count($_items)): ?>        
+        <ol id="cart-sidebar" class="mini-products-list" onmouseover="show_recetlyadd()" style="display:none;">
+        <?php foreach($_items as $_item): ?>
+            <?php echo $this->getItemHtml($_item) ?>
+        <?php endforeach; ?>
+        </ol>
+        <script type="text/javascript">decorateList('cart-sidebar', 'none-recursive')</script>
+    <?php else: ?>
+        <p class="empty" style="padding:2px 0 0 0;"><?php echo $this->__(' Cart: no Items') ?></p>
+    <?php endif ?>
+    </div>
+</div>
+<?php endif;?>

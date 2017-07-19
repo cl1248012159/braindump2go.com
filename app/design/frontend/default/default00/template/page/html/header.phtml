@@ -1,0 +1,74 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * @var Mage_Page_Block_Html_Header $this
+ */
+?>
+<div class="header-container">	
+	<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('header_top_ad')->toHtml() ?>
+    <div class="header">
+		<div class="header_welcome">
+			<div class="welcome_div">
+				<p class="welcome-msg"><?php echo $this->getWelcome()?></p>
+				<?php echo $this->getChildHtml('topLinks') ?>
+			</div>
+		</div>
+		<div class="header_conton">
+			<?php if ($this->getIsHomePage()):?>
+                 <h1 class="logo">
+				 <strong><?php echo $this->getLogoAlt() ?></strong>
+				 <a id="homepage" href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo">
+				 <img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" />
+				 </a>
+				 </h1>
+       		<?php else:?>
+        		<a href="<?php echo $this->getUrl('') ?>" title="<?php echo $this->getLogoAlt() ?>" class="logo">
+				<strong><?php echo $this->getLogoAlt() ?></strong>
+				<img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" />
+				</a>
+        	<?php endif?>
+			
+			<div class="quick-access">
+				<a href="#" class="mcafee"><img src="http://images.scanalert.com/meter/www.mcafee.com/13.gif"/></a>
+				<div class="quick_top">
+				<?php echo $this->getChildHtml('topSearch') ?>
+				<?php echo $this->getChildHtml('cart_sidebar') ?>
+				</div>
+            	
+				
+       		</div>
+		</div>
+		
+        
+        
+        <?php echo $this->getChildHtml('topContainer'); ?>
+    </div>
+</div>
+<div class="topmenu">
+	<div class="topmenu_left"></div>
+		<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('topmenu ')->toHtml() ?>
+	<div class="topmenu_right"></div>
+</div>

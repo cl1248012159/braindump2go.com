@@ -1,0 +1,49 @@
+<script type="text/javascript">
+function openMenu(obj,id){
+	obj.className="level1 over";
+	document.getElementById('display_id'+id).className = 'needdisplay shown-sub';
+	document.getElementById('level1_id'+id).className = 'level1_a over_a';
+}
+function closeMenu(obj,id){
+	obj.className="level1";
+	document.getElementById('display_id'+id).className = 'needdisplay';
+	document.getElementById('level1_id'+id).className = 'level1_a';
+}
+
+</script>
+
+            <ul>
+
+            	<?php
+            	$categories = array();
+            	$level_count = 0;
+                $i=0;
+            	foreach ($this->getStoreCategories() as $category) {
+            	   $i++;
+            		if($level_count>=6){
+            ?>
+            
+            	<?php
+                 break;}else{$level_count++;}
+            		if ($category->getIsActive()) {		
+            	?>
+            
+                	<li class="cat<?php echo $i?>">
+                		<a href="<?php echo $this->getCategoryUrl($category) ?>">
+                			<span><?php echo $this->htmlEscape($category->getName());?></span>
+                		</a>
+                	
+                	</li>
+            	<?php }if($level_count>=6){
+            		   break;
+            		  } }?>
+                      <li class="cat7">
+                            <a href="<?php echo $this->getBaseUrl()?>all-products.html">
+                                <?php echo $this->__('View All')?>
+                            </a>
+                      </li>
+            	</ul>
+            
+                   
+
+

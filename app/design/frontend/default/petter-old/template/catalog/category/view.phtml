@@ -1,0 +1,164 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Category view template
+ *
+ * @see Mage_Catalog_Block_Category_View
+ */
+?>
+<?php
+    $_helper    = $this->helper('catalog/output');
+    $_category  = $this->getCurrentCategory();
+    $_imgHtml   = '';
+    if ($_imgUrl = $_category->getImageUrl()) {
+        $_imgHtml = '<p class="category-image"><img src="'.$_imgUrl.'" alt="'.$this->htmlEscape($_category->getName()).'" title="'.$this->htmlEscape($_category->getName()).'" /></p>';
+        $_imgHtml = $_helper->categoryAttribute($_category, $_imgHtml, 'image');
+    }
+?>
+<div id="certs-list">
+<div class="inner-certs" style="position:relative;">
+<div class="category-title">
+    <?php if($this->IsRssCatalogEnable() && $this->IsTopCategory()): ?>
+        <a href="<?php echo $this->getRssLink() ?>" class="link-rss"><?php echo $this->__('Subscribe to RSS Feed') ?></a>
+    <?php endif; ?>
+    <h1><?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?> Certification Exams Training Materials & Study Guides</h1>
+</div>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<?php if($_imgUrl): ?>
+    <?php echo $_imgHtml ?>
+<?php endif; ?>
+
+<div class="category_top">	
+    
+	<?php if($_category->getLevel()==2){?> 
+	<p></p>Braindump2go.com is a leading supplier and professional institution on 
+    <?php echo $_category->getName();?> certification for years. We are a group of talented and 
+    experienced IT professionals and compile authoritative <?php echo $_category->getName();?> 
+    Certification Guidebook according to the real exams. Also we will update our questions and answers with the 
+    change of the real examinations, so with the help of our training materials, <?php echo $_category->getName();?> 
+    exams will become so easy to pass 100% guaranteed.</p>
+	<?php
+	}
+	if($_category->getLevel()==3){
+	?>
+	  <p>We are here to make you feel confident and speak loudly that <?php echo $_category->getParentCategory()->getName();?> 
+       <?php echo $_category->getName();?> is easy to pass. Our study materials are compiled by experienced IT experts 
+       and cover all the important knowledge points and we promise these 
+       <?php echo $_category->getParentCategory()->getName();?> <?php echo $_category->getName();?> guidebooks will be 
+       updated in time with the change of the real <?php echo $_category->getParentCategory()->getName();?> 
+       <?php echo $_category->getName();?> exams. Besides, Passleader.com even offers online practice and professional 
+       guiding throughout your preparation work.</p>
+	<?php
+	}
+	?>        
+ 
+    
+
+	<?php $categories = $this->getCurrentCategory()->getChildrenCategories();?>		
+		<?php if($categories): ?>
+        <?php  $i=0;?>
+			<?php foreach ($categories as $category_one): ?>
+            <?php $i++;?>
+            	<div class="certs-block" style="<?php if($i%3==0){echo 'border-right:none;';}else{}?>">
+                    <?php if($category_one->getIsActive()): ?>
+                          <div class="exams">
+                               <span>
+                                      <?php echo $category_one->getProductCount() ?>
+                              </span>
+                                 <br/>
+                                 Exam
+                          </div>
+                          <div class="info">
+                             <div style="height:60px;">
+                                <div class="heading4">
+                                    <a href="<?php echo $category_one->getUrl() ?>">
+            							<?php echo $this->htmlEscape($category_one->getName()) ?>
+            						</a>
+                                </div>
+                            </div>
+                    
+                          <a href="<?php echo $category_one->getUrl() ?>">
+                               <img title="<?php echo $this->htmlEscape($category_one->getName()) ?>" alt="See ACHDS in Details" src="/skin/frontend/default/petter/images/detail_01.png"/>
+                          </a>
+                  
+                           </div>
+                    <?php endif; ?>
+                    </div>
+           <?php endforeach ?>
+
+	<?php endif; ?>
+
+	
+	
+	
+
+<!--<?php //if($this->isContentMode()): ?>
+    <?php// echo $this->getCmsBlockHtml() ?>
+
+<?php// elseif($this->isMixedMode()): ?>
+    <?php //echo $this->getCmsBlockHtml() ?>
+    <?php //echo $this->getProductListHtml() ?>
+
+<?php //else: ?>
+    <?php// echo $this->getProductListHtml() ?>
+<?php //endif; ?>-->
+</div>
+</div>
+
+<div id="vend-blocks">
+    <div class="vend-left">
+           <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('category-popular-cate')->
+toHtml(); ?>
+
+    </div>
+    <div class="inner-text">
+            <h4>100% Risk Free Investment on Purchase of <?php echo  $_category->getName();?> Exam Products</h4>
+        <p>A very beneficial reason for taking our <?php echo  $_category->getName();?> certification exam products is, we give refunds if you are not able to pass your <?php echo  $_category->getName();?> certification exam in your first attempt. We assure you that your refund request will be suitably processed once we receive it. This guarantees you a totally risk free endeavor.</p>
+        <p>A <?php echo  $_category->getName();?> certification credentials on your resume will surely give you a special place in your work places. <?php echo  $_category->getName();?> certified professionals are considered as assets in any organization, and if you aspire to be one of them, then braindump2go is unquestionably your best ally. You simply expand your career horizons by going for our products. Make the right move today, and you will be glad you did.</p>
+        <p>For your convenience, we offer many payment options to suit your needs and conveniences. We accept all Visa/Master debit and credit cards. Other payment options like paypoint (metacharge) etc are also made available for our future professionals. You may contact us for other payment plans, and we will try our best to help you make payments the way they suit you.</p>
+        <p>Below listed are some very important <?php echo  $_category->getName();?>  certifications that we offer to our customers. If you do not find any certification on our website, we suggest you to contact customer support, or use the smart site search feature.</p>
+        <div class="pop-exams">
+             <h4>Popular <?php echo  $_category->getName();?>  Exams</h4>
+             <?php echo $this->getProductListHtml() ?>
+        </div>
+    </div>
+    <div class="vend-right">
+          <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('new-releases')->
+toHtml(); ?>
+    </div>
+</div>
+
+
+<div id="vend-text">
+<div class="inner-text">
+<h2>Free <?php echo  $_category->getName();?> Certification Product Demos</h2>
+<p>We offer you free demo products on all <?php echo  $_category->getName();?> certifications. You can download them easily from our website and become familiar with our <?php echo  $_category->getName();?> training products. You can then make your buying decisions once you are satisfied with the value that we deliver. You can find sample <?php echo  $_category->getName();?> certification questions and answers for downloads on all the <?php echo  $_category->getName();?> exams pages. Even though, our actual <?php echo  $_category->getName();?> products are more useful and comprehensive than their demo versions, it is something we urge you to try first. Informed choices are always the best choices.</p>
+</div>
+</div>
