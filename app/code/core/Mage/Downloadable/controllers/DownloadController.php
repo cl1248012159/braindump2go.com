@@ -64,8 +64,8 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
         /* @var $helper Mage_Downloadable_Helper_Download */
         $helper->setResource($resource, $resourceType);
 
-        $fileName       = $helper->getFilename();
-        $contentType    = $helper->getContentType();
+        $fileName       = $helper->getFilename();Mage::log($fileName,null,'amy.log');
+        $contentType    = $helper->getContentType();Mage::log($contentType,null,'amy.log');
 
         $this->getResponse()
             ->setHttpResponseCode(200)
@@ -115,7 +115,6 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
             } catch (Mage_Core_Exception $e) {
-                Mage::log($e,null,'amy.log');
                 $this->_getSession()->addError(Mage::helper('downloadable')->__('An error occurred while getting requested content. Please contact the store owner.'));
             }
         }
