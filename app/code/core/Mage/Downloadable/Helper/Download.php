@@ -220,6 +220,9 @@ class Mage_Downloadable_Helper_Download extends Mage_Core_Helper_Abstract
     public function getFilename()
     {
         $handle = $this->_getHandle();
+        Mage::log($this->_linkType,null,'amy.log');
+        Mage::log(self::LINK_TYPE_FILE,null,'amy.log');
+        Mage::log(self::LINK_TYPE_URL,null,'amy.log');
         if ($this->_linkType == self::LINK_TYPE_FILE) {
             return pathinfo($this->_resourceFile, PATHINFO_BASENAME);
         }

@@ -60,12 +60,12 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
         Mage::log($resourceType,null,'amy.log');
         $resource = str_replace('http://demo.braindump2go.com/','https://demo.braindump2go.com/',$resource);
 
-        $helper = Mage::helper('downloadable/download');Mage::log('help',null,'amy.log');
+        $helper = Mage::helper('downloadable/download');
         /* @var $helper Mage_Downloadable_Helper_Download */
-        $helper->setResource($resource, $resourceType);Mage::log('help set',null,'amy.log');
+        $helper->setResource($resource, $resourceType);
 
-        $fileName       = $helper->getFilename();Mage::log($fileName,null,'amy.log');
-        $contentType    = $helper->getContentType();Mage::log($contentType,null,'amy.log');
+        $fileName       = $helper->getFilename();
+        $contentType    = $helper->getContentType();
 
         $this->getResponse()
             ->setHttpResponseCode(200)
