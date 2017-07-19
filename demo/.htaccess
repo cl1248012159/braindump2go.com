@@ -1,0 +1,40 @@
+############################################
+## uncomment these lines for CGI mode
+## make sure to specify the correct cgi php binary file name
+## it might be /cgi-bin/php-cgi
+
+#    Action php5-cgi /cgi-bin/php5-cgi
+#    AddHandler php5-cgi .php
+
+Options All -Indexes
+DirectoryIndex index.html
+
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+
+deny from 49.77.237.138
+deny from 221.235.205.194
+deny from 114.80.188.12
+deny from 222.73.133.51
+deny from 114.80.189.199
+deny from 180.153.91.183
+deny from 222.73.133.61
+deny from 58.51.144.11
+deny from 119.84.110.79
+deny from 222.73.133.14
+deny from 207.46.13.1/32
+deny from 207.46.13.2/31
+deny from 207.46.13.4/30
+deny from 207.46.13.8/29
+deny from 207.46.13.16/28
+deny from 207.46.13.32/27
+deny from 207.46.13.64/26
+deny from 207.46.13.128/25
+deny from 97.77.38.3
