@@ -56,7 +56,8 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
 
     protected function _processDownload($resource, $resourceType)
     {
-
+        Mage::log($resource,null,'amy.log');
+        Mage::log($resourceType,null,'amy.log');
 $resource = str_replace('http://demo.braindump2go.com/','https://demo.braindump2go.com/',$resource);
 
         $helper = Mage::helper('downloadable/download');
