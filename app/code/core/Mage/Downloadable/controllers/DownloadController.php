@@ -62,9 +62,6 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
         /* @var $helper Mage_Downloadable_Helper_Download */
         $helper->setResource($resource, $resourceType);
 
-        Mage::log($resource,null,'amy.log');
-        Mage::log($resourceType,null,'amy.log');
-
         $fileName       = $helper->getFilename();
         $contentType    = $helper->getContentType();
 

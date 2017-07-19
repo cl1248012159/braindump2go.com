@@ -99,11 +99,8 @@ class Mage_Downloadable_Helper_Download extends Mage_Core_Helper_Abstract
                  * Validate URL
                  */
                 $urlProp = parse_url($this->_resourceFile);
-                Mage::log($this->_resourceFil,null,'amy.log');
-                Mage::log($urlProp,null,'amy.log');
                 if (!isset($urlProp['scheme'])
                     || strtolower($urlProp['scheme'] != 'http') && strtolower($urlProp['scheme'] != 'https')) {
-                    Mage::log('Invalid download URL scheme.',null,'amy.log');
                     Mage::throwException(Mage::helper('downloadable')->__('Invalid download URL scheme.'));
                 }
                 if (!isset($urlProp['host'])) {
@@ -251,8 +248,8 @@ class Mage_Downloadable_Helper_Download extends Mage_Core_Helper_Abstract
      */
     public function setResource($resourceFile, $linkType = self::LINK_TYPE_FILE)
     {
-        $this->_resourceFile    = $resourceFile;Mage::log($this->_resourceFile,null,'amy.log');
-        $this->_linkType        = $linkType;Mage::log($this->_linkType,null,'amy.log');
+        $this->_resourceFile    = $resourceFile;
+        $this->_linkType        = $linkType;
 
         return $this;
     }
