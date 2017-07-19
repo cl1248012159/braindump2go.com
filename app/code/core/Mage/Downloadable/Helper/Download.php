@@ -99,10 +99,13 @@ class Mage_Downloadable_Helper_Download extends Mage_Core_Helper_Abstract
                  * Validate URL
                  */
                 $urlProp = parse_url($this->_resourceFile);
+                Mage::log($urlProp);
                 if (!isset($urlProp['scheme']) || strtolower($urlProp['scheme'] != 'http')) {
+                    Mage::log('Invalid download URL scheme.',null,'amy.log');
                     Mage::throwException(Mage::helper('downloadable')->__('Invalid download URL scheme.'));
                 }
                 if (!isset($urlProp['host'])) {
+                    Mage::log('Invalid download URL host.',null,'amy.log');
                     Mage::throwException(Mage::helper('downloadable')->__('Invalid download URL host.'));
                 }
                 $hostname = $urlProp['host'];
