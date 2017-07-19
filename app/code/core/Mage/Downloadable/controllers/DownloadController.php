@@ -115,7 +115,8 @@ class Mage_Downloadable_DownloadController extends Mage_Core_Controller_Front_Ac
                 $this->_processDownload($resource, $resourceType);
                 exit(0);
             } catch (Mage_Core_Exception $e) {
-                $this->_getSession()->addError(Mage::helper('downloadable')->__('An error occurred while getting requested content. Please contact the store owner1.'));
+                Mage::log($e,null,'amy.log');
+                $this->_getSession()->addError(Mage::helper('downloadable')->__('An error occurred while getting requested content. Please contact the store owner.'));
             }
         }
         return $this->_redirectReferer();
