@@ -1,0 +1,88 @@
+ <div class="popular float-left">
+  <h1>Popular Certifications</h1>
+<div class="hotcerts" id="hotcert">
+    
+		<?php
+		$categories_ids = array(370,272,163,302);
+		
+		$formId_cats = array();
+		foreach($categories_ids as $get_id){
+			$formId_cats[] =  Mage::getModel('catalog/category')->load($get_id);
+		}
+		
+		
+		foreach ($formId_cats as $category) {
+		
+			if ($category->getIsActive()) {
+		?>
+       
+		<div class="hotspot">
+    		<div class="hotcert_title">	
+                <h2>
+                     <a href="<?php echo $category->getUrl()?>"><?php echo $this->htmlEscape($category->getName());?></a>
+                </h2>
+        	</div>
+    	
+	
+	<?php 
+	 $categoryId = $category->getId();
+	 $category = Mage::getModel('catalog/category')->load($categoryId);
+	 $resource = Mage::getSingleton('core/resource');
+		$read = $resource->getConnection('catalog_read');
+		$categoryProductTable = $resource->getTableName('catalog/category_product');
+		$categoryTable = $resource->getTableName('catalog_category_entity');
+		$productEntityIntTable = (string)Mage::getConfig()->getTablePrefix() . 'catalog_product_entity_int';
+		$eavAttributeTable = $resource->getTableName('eav/attribute');
+		$select_subcat = $read->select()
+		                      ->from(array('cat'=>$categoryTable))
+							  ->where('cat.path LIKE ?',$category->getPath().'/%')
+							  ;
+		$subcategories = $read->fetchAll($select_subcat);
+		$subcatids = array();
+		if(!empty($subcategories)):
+			foreach( $subcategories as $subcategory ):
+			$subcatids[] = $subcategory['entity_id'];
+			endforeach;
+		endif;
+		array_push($subcatids,$categoryId);
+					   
+		$select = $read->select()
+					   ->from(array('cp'=>$categoryProductTable))
+					   ->join(array('pei'=>$productEntityIntTable), 'pei.entity_id=cp.product_id', array())
+					   ->joinNatural(array('ea'=>$eavAttributeTable))
+					   ->where('cp.category_id IN(?)', $subcatids)
+					   ->where('pei.value=1')
+					   ->where('ea.attribute_code="hot_product"');
+
+					   $rows = $read->fetchAll($select);
+		$ids = array();
+
+		foreach($rows AS $row) {
+		  $ids[] = $row['product_id'];
+		}
+		$ret = implode(",", $ids);
+		$collection = Mage::getModel('catalog/product')->getCollection();
+	  $collection->getSelect()->where("e.entity_id in (?)", $ids);
+	  $collection->addAttributeToSelect(array('name','sku','url_key'));
+	  $collection->setOrder('SKU','asc');
+	  $productList = $collection->load();
+	  $count_hotproduct = count($productList);
+	  if($count_hotproduct){
+	  echo '<ul>';
+	  	foreach( $productList as $product_hot):
+	      echo '<li><a class="popo_a" href="'.$product_hot->getProductUrl().'">'.$product_hot->getSku().'</a></li>';
+	 	endforeach;
+	  echo '</ul>';
+	  }
+	  
+	 ?>
+	
+</div>
+
+<?php		
+	}
+}
+?>
+
+</div>
+</div>

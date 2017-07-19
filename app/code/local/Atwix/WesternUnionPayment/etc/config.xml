@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<config>
+    <global>
+	    <blocks>
+	        <westernunionpayment>
+	            <class>Atwix_WesternUnionPayment_Block</class>
+	        </westernunionpayment>
+	    </blocks>
+   
+        <models>
+            <westernunionpayment>
+                <class>Atwix_WesternUnionPayment_Model</class>
+            </westernunionpayment>
+        </models>
+
+        <resources>
+            <westernunionpayment_setup>
+                <setup>
+                    <module>Atwix_WesternUnionPayment</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </westernunionpayment_setup>
+            <westernunionpayment_write>
+                <connection>
+                  <use>core_write</use>
+                </connection>
+            </westernunionpayment_write>
+            <westernunionpayment_read>
+               <connection>
+                <use>core_read</use>
+              </connection>
+            </westernunionpayment_read>
+        </resources>
+    </global>
+
+    <default>
+        <payment>
+            <westernunionpayment>
+                <active>1</active>
+                <payable_to>Enter your Western Union details</payable_to>
+                <model>westernunionpayment/paymentMethod</model>
+                <order_status>pending</order_status>
+                <title>Western Union Payment</title>
+            </westernunionpayment>
+         </payment>
+    </default>
+</config>

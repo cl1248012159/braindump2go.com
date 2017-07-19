@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    </default>
+    <productribbon_index_index> 
+        <reference name="content">
+            <block type="productribbon/productribbon" name="productribbon" template="productribbon/productribbon.phtml" />
+        </reference>
+    </productribbon_index_index>
+    
+    <!--Category default layout-->
+    <catalog_category_default translate="label">
+        <reference name="product_list">
+        <action method="setTemplate" ifconfig="productribbon/mconnectgeneral/module_enable_disable">
+           <template>productribbon/list.phtml</template> 
+        </action>
+            
+        </reference>
+    </catalog_category_default>
+    
+    <!--Category layered navigation layout-->
+    <catalog_category_layered translate="label">
+        <reference name="product_list">         
+        <action method="setTemplate" ifconfig="productribbon/mconnectgeneral/module_enable_disable">
+           <template>productribbon/list.phtml</template> 
+        </action>
+           
+        </reference>
+    </catalog_category_layered>
+    
+    
+    <!--Product view
+    <catalog_product_view translate="label">
+        <reference name="product.info">
+            <action method="setTemplate" ifconfig="productribbon/mconnectgeneral/display_product_label_on_view">
+                <template>productribbon/view.phtml</template>
+            </action>
+        </reference>
+    </catalog_product_view>-->
+    
+    
+    <catalog_product_view>        
+        <reference name="product.info.media">
+            <action method="setTemplate" ifconfig="productribbon/mconnectgeneral/display_product_label_on_view">
+                <template>productribbon/media.phtml</template>
+            </action>
+        </reference>
+    </catalog_product_view>  
+    
+    <review_product_list translate="label">
+        <reference name="product.info.media">
+            <action method="setTemplate" ifconfig="productribbon/mconnectgeneral/display_product_label_on_view">
+                <template>productribbon/media.phtml</template>
+            </action>
+        </reference>        
+    </review_product_list>
+    
+    <!-- product search page -->
+    <catalogsearch_result_index translate="label">
+        <reference name="search_result_list">
+            
+            <action method="setTemplate" ifconfig="productribbon/mconnectgeneral/module_enable_disable">
+            <template>productribbon/list.phtml</template> 
+            </action>
+            
+        </reference>
+    </catalogsearch_result_index>
+    
+    <!--Advanced search results-->
+    <catalogsearch_advanced_result translate="label">
+        <reference name="search_result_list">
+            
+            <action method="setTemplate" ifconfig="productribbon/mconnectgeneral/module_enable_disable">
+            <template>productribbon/list.phtml</template> 
+            </action>
+            
+        </reference>
+    </catalogsearch_advanced_result>
+    
+    
+</layout> 

@@ -1,0 +1,22 @@
+<div class="top">
+   <div style="height:50px">
+            <h1>Testimonials</h1>
+   </div>
+	<div class="block-content">
+<?php if ($posts = $this->getRecent()): ?>
+
+		
+		<?php $i=0; foreach ($posts as $post): ?>
+        <?php $i++;?>
+        <div class="tesBigArea <?php if($i!=4): ?> first<?php elseif($i==4): ?> last<?php endif; ?>">
+			<?php echo substr($post->getShortContent(),0,150); ?>...
+         </div>
+         <?php if($i>=4){break;}?>
+		<?php endforeach; ?>
+      
+<div class="bott"></div>
+<?php endif; ?>
+		
+	</div>
+</div>
+

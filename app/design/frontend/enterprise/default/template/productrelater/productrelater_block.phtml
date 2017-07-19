@@ -1,0 +1,47 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Productrelater
+ * @copyright  Copyright (c) 2003-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+?>
+<br>
+<div class="<?php if ($this->getLocation()=='product_page') : ?>product-view<?php endif; ?> aw-arp-block">
+    <div class="box-collateral box-related">
+        <div class="box-title">
+            <h2><?php echo $this->getBlockName() ?></h2>
+        </div>
+        <div class="box-content aw-arp-content">
+            <?php if($this->getCount()>0) : ?>
+            <?php foreach ($this->getItems() as $item) : ?>
+            <div class="aw-arp-item">
+                <a href="<?php echo $item->getProductUrl()?>"><img src="<?php echo $this->helper('catalog/image')->init($item,'thumbnail')->resize(50)?>" alt="<?php echo $this->htmlEscape($item->getName())?>" width="50" height="50" /></a><br>
+                <a href="<?php echo $item->getProductUrl()?>"><?php echo $this->htmlEscape($item->getName())?></a><br>
+                <?php echo $this->getPriceHtml($item, true)?>
+            </div>
+            <?php endforeach; ?>
+            <?php  else : ?>
+            <div class="aw-arp-noitems">No related products</div>
+            <?php endif; ?>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    Mage.Cookies.set('<?php echo Enterprise_PageCache_Model_Processor::NO_CACHE_COOKIE; ?>', 1);
+</script>
+<style type="text/css">
+.aw-arp-item {
+    width: <?php echo ceil(100/($this->getCount()!=0 ? $this->getCount() : 1 ))-1?>%;
+}
+</style>

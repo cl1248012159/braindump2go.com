@@ -1,0 +1,63 @@
+<script src="<?php echo $this->getSkinUrl('js/jquery-1.js')?>"></script>
+<div class="big_banner">
+
+<div id="play">
+  <div id="play_text">
+    <ul>
+      <li class="banner1">1</li>
+      <li class="banner2">2</li>
+      <li class="banner3">3</li>
+    </ul>
+  </div>
+  
+  <div id="play_list"> 
+	  <a href="#">
+		<img width="750" height="295" src="<?php echo $this->getSkinUrl('bigbanner/my_banner_01.jpg');?>"> 
+	  </a> 
+	  <a href="#"> 
+		<img width="750" height="295" src="<?php echo $this->getSkinUrl('bigbanner/my_banner_02.jpg');?>"> 
+	  </a> 
+	  <a href="#"> 
+		<img width="750" height="295" src="<?php echo $this->getSkinUrl('bigbanner/my_banner_03.jpg');?>"> 
+	  </a> 
+  </div>
+  
+</div>
+
+</div>
+
+
+<script type="text/javascript">
+
+var $j = jQuery.noConflict();
+var big = n = count = 0;  
+
+$j(document).ready(function(){
+ count = $j("#play_list a").size();  
+ $j("#play_list a:not(:first-child)").hide(); 
+ $j("#play_text li:first").addClass("banner_on_0");
+ 
+ $j("#play_text li").click(function() {
+         var i = $j(this).text() - 1; 
+         n = i;   
+         if (i >= count) return; 
+         $j("#play_list a").filter(":visible").fadeOut(1000).parent().children().eq(i).fadeIn(1000);
+		 
+		 if(i==0){$j(this).addClass("banner_on_0").siblings().removeClass("banner_on_1").siblings().removeClass("banner_on_2");} 
+		 if(i==1){$j(this).addClass("banner_on_1").siblings().removeClass("banner_on_0").siblings().removeClass("banner_on_2");} 
+		 if(i==2){$j(this).addClass("banner_on_2").siblings().removeClass("banner_on_0").siblings().removeClass("banner_on_1");}
+           
+     });  
+	 
+ big = setInterval("showAuto()", 6000); 
+ $j("#play").mouseout(function(){big = setInterval("showAuto()", 6000);})
+ $j("#play").mouseover(function(){clearInterval(big);})
+});
+
+
+function showAuto()   
+ {   
+     n = n>= (count - 1) ? 0 : n + 1;  
+     $j("#play_text li").eq(n).trigger('click');   
+ }
+</script>

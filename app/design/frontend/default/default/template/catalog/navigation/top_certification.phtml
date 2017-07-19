@@ -1,0 +1,33 @@
+<style>
+#topcert {
+	position: absolute;
+	top: 130px;
+	left: 370px;
+	z-index: 1;
+	width: 420px;
+        border: #74C1EF solid 1px;
+        border-top: none;
+}
+#topcert dl dt a {
+	background: #fff;
+        color:#29517A;
+}
+#topcert dl dt a:hover {
+        text-decoration:underline;
+        color:#93020f;
+}
+#topcert dl dt {
+	width: 140px;
+	float: left;
+	background: #fff;
+	border-bottom: #74C1EF dotted 1px;
+	text-align: left;
+	text-shadow: none;
+	text-transform: none;
+	font: normal 12px Verdana, helvetica, sans-serif;
+}
+</style>
+
+<div id="topcert" style="display:none;">
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('topcertification')->toHtml() ?>
+</div>

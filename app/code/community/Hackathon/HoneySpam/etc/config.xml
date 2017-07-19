@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @category  Hackathon
+ * @package   Hackathon_HoneySpam
+ * @author    Andreas Emer <honeyspam@emdec.de>
+ * @author    Fabian Blechschmidt <hackathon@fabian-blechschmidt.de>
+ * @author    Sascha Wohlgemuth <sascha.wohlgemuth@gmail.com>
+ * @author    Bastian Ike <bastian.ike@gmail.com>
+ * @author    Peter Ukener <peterukener@gmail.com>
+ * @copyright 2012 Magento Hackathon
+ * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      http://www.magento-hackathon.de/
+ */
+-->
+<config>
+    <modules>
+        <Hackathon_HoneySpam>
+            <version>0.1.0</version>
+        </Hackathon_HoneySpam>
+    </modules>
+    <global>
+        <models>
+            <hackathon_honeyspam>
+                <class>Hackathon_HoneySpam_Model</class>
+            </hackathon_honeyspam>
+        </models>
+        <blocks>
+            <hackathon_honeyspam>
+                <class>Hackathon_HoneySpam_Block</class>
+            </hackathon_honeyspam>
+        </blocks>
+        <helpers>
+            <hackathon_honeyspam>
+                <class>Hackathon_HoneySpam_Helper</class>
+            </hackathon_honeyspam>
+        </helpers>
+    </global>
+    <frontend>
+        <events>
+            <controller_action_predispatch_customer_account_createpost>
+                <observers>
+                    <hackathon_honeyspam>
+                        <class>Hackathon_HoneySpam_Model_Observer</class>
+                        <method>controllerActionPredispatchCustomerAccountCreatepost</method>
+                    </hackathon_honeyspam>
+                </observers>
+            </controller_action_predispatch_customer_account_createpost>
+            
+            <controller_action_predispatch_review_product_post>
+                <observers>
+                    <hackathon_honeyspam>
+                        <class>Hackathon_HoneySpam_Model_Observer</class>
+                        <method>controllerActionPredispatchBlockReviewForm</method>
+                    </hackathon_honeyspam>
+                </observers>
+            </controller_action_predispatch_review_product_post>
+
+            <controller_action_predispatch_customer_account_create>
+                <observers>
+                    <hackathon_honeyspam>
+                        <class>Hackathon_HoneySpam_Model_Observer</class>
+                        <method>controllerActionPredispatchCustomerAccountCreate</method>
+                    </hackathon_honeyspam>
+                </observers>
+            </controller_action_predispatch_customer_account_create>
+
+            <controller_action_predispatch_customer_account_forgotpasswordpost>
+                <observers>
+                    <hackathon_honeyspam>
+                        <class>Hackathon_HoneySpam_Model_Observer</class>
+                        <method>controllerActionPredispatchCustomerAccountForgotPasswordPost</method>
+                    </hackathon_honeyspam>
+                </observers>
+            </controller_action_predispatch_customer_account_forgotpasswordpost>
+
+            <controller_action_predispatch_contacts_index_post>
+                <observers>
+                    <hackathon_honeyspam>
+                        <class>Hackathon_HoneySpam_Model_Observer</class>
+                        <method>controllerActionPredispatchContactsIndexPost</method>
+                    </hackathon_honeyspam>
+                </observers>
+
+            </controller_action_predispatch_contacts_index_post>
+        </events>
+        <layout>
+            <updates>
+                <hackathon_honeyspam>
+                    <file>honeyspam.xml</file>
+                </hackathon_honeyspam>
+            </updates>
+        </layout>
+        <routers>
+            <hackathon_honeyspam>
+                <use>standard</use>
+                <args>
+                    <module>Hackathon_HoneySpam</module>
+                    <frontName>honeyspam</frontName>
+                </args>
+            </hackathon_honeyspam>
+        </routers>
+    </frontend>
+    <default>
+        <hackathon>
+            <honeyspam>
+                <enableHoneypotName>1</enableHoneypotName>
+                <enableHoneypotAccountCreateTime>1</enableHoneypotAccountCreateTime>
+                <honeypotAccountCreateTime>5</honeypotAccountCreateTime>
+                <honeypotName>url</honeypotName>
+                <spamIndexLevel>2.5</spamIndexLevel>
+            </honeyspam>
+        </hackathon>
+    </default>
+</config>

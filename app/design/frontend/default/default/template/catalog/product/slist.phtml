@@ -1,0 +1,141 @@
+<style type="text/css">
+.certif_list {
+float: left;
+width: 745px;
+position: relative;
+margin: 33px 0 0 0;
+}
+.certif_list_layout {
+float: left;
+width: 745px;
+}
+.certif_list_text {
+float: left;
+width: 723px;
+border: 1px solid #CCCCCC;
+padding: 10px;
+}
+.certif_list_text {
+float: left;
+width: 723px;
+border: 1px solid #CCCCCC;
+padding: 10px;
+}
+.certif_list_text ul {
+float: left;
+border-bottom: 1px solid #e9e9e9;
+}
+.certif_list_text ul li.l1 {
+float: left;
+width: 90px;
+background: url(/skin/frontend/default/default/images/icon_list_pr.gif) no-repeat 0 11px;
+padding: 10px 0 10px 15px;
+font-weight: bold;
+}
+.certif_list_text ul li.l2 {
+float: left;
+width: 400px;
+padding: 10px 0;
+}
+.certif_list_text ul li.l5 {
+float: left;
+width: 88px;
+padding: 10px 0;
+}
+.old-price {
+width: auto;
+float: left;
+width: 60px;
+text-decoration: line-through;
+}
+.old-price .price {
+color:#4e4e4e;
+font-weight:normal;
+}
+.special-price {
+padding: 0;
+width: auto;
+float: left;
+width: 70px;
+color: #ff6600;
+font-size: 14px;
+margin-top: -2px;
+}
+.price-box {
+float:left;
+margin: 10px 0;
+}
+.list-right {
+width:255px;
+}
+</style>
+<?php
+    $_productCollection=$this->getLoadedProductCollection();
+    $_helper = $this->helper('catalog/output');
+?>
+<?php if(!$_productCollection->count()): ?>
+<p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p>
+<?php else: ?>
+<?php if($this->getMode()!='grid'): ?>
+<?php $_iterator = 0; ?>
+
+<div class="certif_list">
+  <div class="certif_list_layout">
+    <div class="cx1"></div>
+    <div class="cx3"></div>
+    <div class="cx2"></div>
+    <div class="cx4"></div>
+  </div>
+  <div class="certif_list_text">
+    <!--h2>List of CCNA Certification Exams</h2-->
+    <?php foreach ($_productCollection as $_product): ?>
+    <ul >
+      <li class="l1"><a href="<?php echo $_product->getProductUrl() ?>"> <?php echo $_product->getSku() ?></a></li>
+      <li class="l2"><a href="<?php echo $_product->getProductUrl() ?>"><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></a> </li>
+      <!--li class="l3">$125.99</li>
+      <li class="l4">$99.99</li-->
+      <?php echo $this->getPriceHtml($_product, true); ?>
+      <li class="l5">
+        <input type="image" value="3423" src="/skin/frontend/default/default/images/btn_buynow.gif" width="80" height="18" title="" onclick="setLocation('<?php echo $_product->getProductUrl()  // $this->getAddToCartUrl($_product) ?>')"/>
+        <img src="/skin/frontend/default/default/images/ajax-loader.gif" style="display:none;"/> </li>
+    </ul>
+    <?php endforeach; endif; endif; ?>
+  </div>
+</div>
+
+
+
+<div class="whychoose">
+  <div class="whychoose_layout">
+    <div class="wc_1"></div>
+    <div class="wc_2"></div>
+    <div class="wc_3"></div>
+    <div class="wc_4"></div>
+  </div>
+  <div class="wc_title">
+    <h2>Why Choose Braindump2go Testing Engine</h2>
+  </div>
+  <div class="wc_text">
+    <div align="center">
+      <table width="680" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="36" height="100" align="left" valign="top"><img src="/skin/frontend/default/default/images/w_c1.gif" width="27" height="27" /></td>
+          <td width="297" align="left" valign="top"><h5>Quality and Value</h5>
+            <p>Braindump2go Practice Exams are written to the highest standards of technical accuracy, using only certified subject matter experts and published authors for development. </p></td>
+          <td width="35" align="left" valign="top"><img src="/skin/frontend/default/default/images/w_c2.gif" width="27" height="29" /></td>
+          <td width="312" align="left" valign="top"><h5>Tested and Approved</h5>
+            <p>We are committed to the process of vendor and third party approvals. We believe this professionals and executives alike deserve the confidence of quality coverage these authorizations provide. </p></td>
+        </tr>
+        <tr>
+          <td height="105" align="left" valign="top"><img src="/skin/frontend/default/default/images/w_c3.gif" width="36" height="36" /></td>
+          <td align="left" valign="top"><h5>Easy to Pass</h5>
+            <p>If you prepare for the exams using our Braindump2go testing engine, It is easy to succeed for your certifications in the first attempt.</p></td>
+          <td align="left" valign="top"><img src="/skin/frontend/default/default/images/w_c4.gif" width="35" height="37" /></td>
+          <td align="left" valign="top"><h5>Try Before Buy</h5>
+            <p>Braindump2go offers free demo of each product. You can check out the interface, question quality and usability of our practice exams before you decide to buy. </p>
+            </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,216 @@
+<style type="text/css">
+#finis {
+	margin: 5px auto;
+	width: 1000px;
+}
+.finis_index {
+	margin: 5px auto;
+	float: left;
+	width: 1000px;
+	height: 170px;
+	background: #165788;
+	position: relative;
+}
+.finis_index_left_top {
+	position: absolute;
+	width: 5px;
+	height: 25px;
+	top: 0;
+	left: 0;
+	background: url(/skin/frontend/default/default/bg/bg_feedbackbg.gif) left top no-repeat;
+}
+.finis_index_left_bottom {
+	position: absolute;
+	width: 5px;
+	height: 10px;
+	bottom: 0;
+	left: 0;
+	background: url(/skin/frontend/default/default/bg/bg_feedbackbg.gif) left bottom no-repeat;
+}
+.finis_index_right_top {
+	position: absolute;
+	width: 5px;
+	height: 25px;
+	top: 0;
+	right: 0;
+	background: url(/skin/frontend/default/default/bg/bg_feedbackbg.gif) right top no-repeat;
+}
+.finis_index_right_bottom {
+	position: absolute;
+	width: 5px;
+	height: 10px;
+	bottom: 0;
+	right: 0;
+	background: url(/skin/frontend/default/default/bg/bg_feedbackbg.gif) right bottom no-repeat;
+}
+.expert, .news, .feedback, .Partners {
+	float: left;
+	width: 240px;
+	height: 155px;
+	background: url(/skin/frontend/default/default/bg/bg_fin_line.gif) right top repeat-y;
+	text-align: center;
+	padding: 5px 10px 0 0;
+}
+.Partners {
+	background:none;
+}
+.expert h4, .news h4, .feedback h4, .Partners h4 {
+	font-size: 13pt;
+	color: #fff;
+	font-family: Segoe UI, Verdana, Arial, Sans-Serif;
+	background: #165788;
+}
+.expert ul {
+	float: left;
+	width: 190px;
+	padding: 0 0 0 30px;
+}
+.expert ul li.he1 {
+	float: left;
+	width: 38px;
+	padding: 4px;
+}
+.news p.t3 {
+	padding: 4px 0;
+	color: #ea7454;
+}
+.news p {
+	float: left;
+	width: 210px;
+	padding: 0;
+	margin: 0;
+	text-align: right;
+	color: #92bccb;
+	line-height: 14px;
+}
+.news p.t3 a {
+	color: #ea7454;
+	text-decoration: underline;
+}
+.feedback p.f3 {
+	padding: 4px 0;
+	color: #ea7454;
+}
+.feedback p {
+	float: left;
+	width: 210px;
+	padding: 0;
+	margin: 0;
+	text-align: right;
+	color: #92bccb;
+	line-height: 14px;
+}
+.feedback p.f3 a {
+	color: #ea7454;
+	text-decoration: underline;
+}
+</style>
+<div class="clear"></div>
+<div id="finis">
+  <div class="finis_index">
+    <div class="finis_index_left_top"></div>
+    <div class="finis_index_left_bottom"></div>
+    <div class="finis_index_right_top"></div>
+    <div class="finis_index_right_bottom"></div>
+    <div class="expert">
+      <h4>Our IT Experts Team</h4>
+      <ul>
+        <li class="he1"><a href="javascript:void(0);" id="expert_one"><img src="/skin/frontend/default/default/bg/001_s.jpg" border="0" /></a></li>
+        <li class="he1"><a href="javascript:void(0);" id="expert_two"><img src="/skin/frontend/default/default/bg/002_s.jpg" border="0" /></a></li>
+        <li class="he1"><a href="javascript:void(0);" id="expert_three"><img src="/skin/frontend/default/default/bg/003_s.jpg" border="0" /></a></li>
+        <li class="he1"><a href="javascript:void(0);" id="expert_four"><img src="/skin/frontend/default/default/bg/004_s.jpg" border="0" /></a></li>
+        <li class="he1"><a href="javascript:void(0);" id="expert_five"><img src="/skin/frontend/default/default/bg/005_s.jpg" border="0" /></a></li>
+        <li class="he1"><a href="javascript:void(0);" id="expert_six"><img src="/skin/frontend/default/default/bg/006_s.jpg" border="0" /></a></li>
+      </ul>
+    </div>
+    <div class="news" >
+      <h4> Braindump2go News</h4>
+      <div align="center" id="NewsLoad" style="display:none;"><img src="/skin/frontend/default/default/bg/ajax-loader.gif" /></div>
+      <div id="NewsList"></div>
+      
+      <?php
+$collection = Mage::getModel('blog/cat')->getCollection()
+  ->addStoreFilter(Mage::app()->getStore()->getcat())
+  ->setOrder('sort_order ', 'desc');
+  $route = Mage::helper('blog')->getRoute();
+        
+  foreach ($collection as $item)
+  {
+   $item->setAddress($this->getUrl($route . "/cat/" . $item->getIdentifier()));
+  }  
+?>
+
+<?php 
+     $blogPosts = Mage::getModel('blog/blog')->getCollection()
+        ->addStoreFilter(Mage::app()->getStore()->getId())
+        ->setOrder('created_time','desc');
+        
+     $blogPosts->getSelect()->limit(1);
+     $blog_content = "";
+     echo '';
+     foreach($blogPosts as $post){
+        echo '<a href="reviews/cat/new-exam/post/passed-actm-9l0-010-9l0-063.html"><span style="color:#fff">Passed ACMT 9L0-010 and 9L0-063</span></a><br/>';
+        echo  '<p style="text-align:left;width:235px;line-height:18px;">Cleared my ACMT exam today, now I got my ACMT certification. You need to pass 9L0-010 and 9L0-063 exam for this certification. I used Examgoal 9L0-010 dump and 9L0-063 dump...<a href="reviews/cat/new-exam/post/passed-actm-9l0-010-9l0-063.html"style="color:#92bccb;"> [ More ]</p>';
+        echo   '';
+        }
+     echo '';
+?>
+
+
+      <p class="t3"><a href="/reviews/cat/new-exam">Find Out More &gt;</a></p>
+    </div>
+    <div class="feedback">
+      <h4>Customer Feedbacks</h4>
+      <div align="center" id="FeedLoad" style="display:none;"><img src="/skin/frontend/default/default/bg/ajax-loader.gif" /></div>
+      <div id="FeedList"></div>
+      
+      
+<?php
+$collection = Mage::getModel('blog/cat')->getCollection()
+  ->addStoreFilter(Mage::app()->getStore()->getcat())
+  ->setOrder('sort_order ', 'desc');
+  $route = Mage::helper('blog')->getRoute();
+        
+  foreach ($collection as $item)
+  {
+   $item->setAddress($this->getUrl($route . "/cat/" . $item->getIdentifier()));
+  }  
+?>
+
+<?php 
+     $blogPosts = Mage::getModel('blog/blog')->getCollection()
+        ->addStoreFilter(Mage::app()->getStore()->getId())
+        ->setOrder('created_time','desc');
+        
+     $blogPosts->getSelect()->limit(1);
+     $blog_content = "";
+     echo '';
+     foreach($blogPosts as $post){
+        echo '<a href="reviews/cat/reviews/post/'.$post->getData('identifier').'"><span style="color:#fff">'.$post->getData('title').'</span></a><br/>';
+        echo  '<p style="text-align:left;width:235px;line-height:18px;">'.substr($post->getData('post_content'),0,180).'...<a href="reviews/cat/reviews/post/'.$post->getData('identifier').'"style="color:#92bccb;"> [ More ]</p>';
+        echo   '';
+     }
+     echo '';
+?>
+
+
+      <p class="f3"><a href="/reviews/cat/reviews">Find Out More &gt;</a></p>
+    </div>
+    <div class="Partners">
+      <h4>Braindump2go Partners</h4>
+      <div align="center">
+        <table width="100" height="127" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td><a href=""><img src="/skin/frontend/default/default/bg/img_part1.jpg" /></a></td>
+          </tr>
+          <tr>
+            <td><a href=""><img src="/skin/frontend/default/default/bg/img_part2.jpg" /></a></td>
+          </tr>
+          <tr>
+            <td><a href=""><img src="/skin/frontend/default/default/bg/img_part3.jpg" /></a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

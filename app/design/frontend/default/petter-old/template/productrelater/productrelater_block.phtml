@@ -1,0 +1,57 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Productrelater
+ * @copyright  Copyright (c) 2003-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+?>
+<br>
+<div class="box base-mini mini-related-items aw-arp-block">
+    <div class="head">
+        <h4 class="relatename"><?php echo $this->getBlockName() ?></h4>
+    </div>
+    <div class="content aw-arp-content">
+	<?php if($this->getCount()>0) : ?>
+	<?php foreach ($this->getItems() as $item) : ?>
+        <div class="aw-arp-item">
+            <a href="<?php echo $item->getProductUrl()?>"><?php echo $this->htmlEscape($item->getSku())?></a>
+        </div>
+	<?php endforeach; ?>
+	<?php else : ?>
+	<div class="aw-arp-noitems">No related products</div>
+	<?php endif; ?>
+        <div class="clear"></div>
+    </div>
+</div>
+<style type="text/css">
+.aw-arp-block{ display:inline-block;width: 730px; background:#eee; padding:10px; border:1px solid #ccc;}
+.relatename{
+color: #4F81BD;
+    font-size: 12pt;
+    font-weight: bold;
+}
+.aw-arp-item {
+    float: left;
+    line-height: 28px;
+    width: 106px;
+}
+.aw-arp-item a{
+    color: #666666;
+    font-size: 14px;
+    text-decoration: none;
+}
+.aw-arp-item a:hover {
+    color: #27905D;
+    text-decoration: underline;
+}
+</style>

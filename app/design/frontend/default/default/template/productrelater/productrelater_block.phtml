@@ -1,0 +1,88 @@
+<?php
+/**
+ * aheadWorks Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ *
+ * @category   AW
+ * @package    AW_Productrelater
+ * @copyright  Copyright (c) 2003-2010 aheadWorks Co. (http://www.aheadworks.com)
+ * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
+ */
+?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<br>
+<div class="reviews">
+        <div class="r2"></div>
+        <div class="r3"></div>
+        <div class="r4"></div>
+        <div class="reviews_content">
+            <div class="reviews_title">
+                <div id="ProBTab" class="reviews_title_c">
+                    <div class="reviews_f">
+                        <div class="r1"></div>
+                        <div class="r3"></div>
+                        <div class="current_hover">
+                              <a href="javascript:void(0);">Related <?php echo $_product->getSku()?> Exams</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  
+   <div id="ProBCon">
+<div class="reviews_text">
+
+	<?php if($this->getCount()>0) : ?>
+        <?php $i=0;?>
+           <ul>
+    	<?php foreach ($this->getItems() as $item) : ?>
+            <?php $i++;?>
+           
+            <li class="re1">
+                    <a href="<?php echo $item->getProductUrl()?>">
+                        <?php echo $this->htmlEscape($item->getSku())?>
+                    </a>
+            </li>
+             <li class="re2">
+                    <a href="<?php echo $item->getProductUrl()?>">
+                        <?php echo $this->htmlEscape($item->getExamName())?>
+                    </a>
+            </li>
+            
+    	<?php endforeach; ?>
+          </ul>
+   <?php endif;?>
+ 
+        <div class="clear"></div>
+    </div>
+    </div>
+    </div>
+</div>
+<style type="text/css">
+.aw-arp-block{ display:inline-block;width: 730px; background:#eee; padding:10px; border:1px solid #ccc;}
+.relatename{
+color: #4F81BD;
+    font-size: 12pt;
+    font-weight: bold;
+}
+.aw-arp-item {
+    float: left;
+    line-height: 28px;
+    width: 106px;
+}
+.aw-arp-item a{
+    color: #666666;
+    font-size: 14px;
+    text-decoration: none;
+}
+.aw-arp-item a:hover {
+    color: #27905D;
+    text-decoration: underline;
+}
+</style>

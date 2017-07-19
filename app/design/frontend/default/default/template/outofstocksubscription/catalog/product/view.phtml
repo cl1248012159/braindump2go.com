@@ -1,0 +1,382 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2010 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<style type="text/css">
+.main {border:none;}
+.list_get {display:none;}
+.col-right {width:255px;}
+.vendors {width:253px;}
+.vendors_title {width:243px}
+.vendors_text {width:243px}
+.certif .product-essential .product-name h1 {color:#ff6600;font-size:1.6em;}
+</style>
+
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="product-view certif">
+    <div class="product-essential">
+		<div class="product-name">
+			<h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>: <?php echo $_product->getSku();?></h1>
+		</div>
+        <div class="certif_list">
+			<div class="product_exams">
+
+    <?php $_storeId = Mage::app()->getStore()->getId(); ?>
+    <?php $_isActive = Mage::getStoreConfig('outofstocksubscription/mail/active', $_storeId); ?>
+    <?php if(!$_product->isSaleable() && $_isActive): ?>
+    	<?php $_url = $this->getUrl('outofstocksubscription') ?>
+    <?php else: ?>
+    	<?php $_url = $this->getAddToCartUrl($_product); ?>
+    <?php endif; ?>
+    
+            <form action="<?php echo $_url ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+                <div class="no-display">
+                    <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+                    <input type="hidden" name="related_product" id="related-products-field" value="" />
+                </div>
+        		<div class="product_exams_left">
+                        <?php echo $this->getChildHtml('media') ?>
+                
+                        <p class="bo1">
+                            <?php echo $this->__('Questions and Answers :')?> 
+                            <?php echo $_product->getQA()?>
+                        </p>
+                        
+                        <p>
+                             <?php echo $this->__('Updated:')?>
+                            <span class="bo2">
+                              <?php echo $_product->getUpdated()?>
+                            </span>
+                        </p>
+                        <style>
+                        #demo {padding:4px;float:left;width:auto;height:20px;text-indent:0;}
+                        button.add-btn-cart {background:url(/skin/frontend/default/default/bg/addcart_bg2.gif);width:145px;height:27px;}
+                        </style>
+                       <?php echo $this->getChildHtml('product_type_data') ?>
+                      	<?php echo $this->getChildHtml('addtocart') ?>
+                        <?php if (!$this->hasOptions()):?>
+                            <div class="add-to-box">
+                                <?php if($_product->isSaleable()): ?>
+                                    <?php echo $this->getChildHtml('addtocart') ?>
+                                    <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
+                                        <span class="or"><?php echo $this->__('OR') ?></span>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                <?php echo $this->getChildHtml('addto') ?>
+                            </div>
+                            <?php echo $this->getChildHtml('extra_buttons') ?>
+                        <?php endif; ?>
+                </div>
+        		<div class="product_exams_right">
+                         <h2>Product Description Exam Number/Code: <?php echo $_product->getSku();?></h2>
+                       <p>
+                                <span class="right_font1">Exam Number/Code:</span>
+                                <span class="right_font2"><?php echo $_product->getSku();?></span>
+                        </p>
+                        
+                        
+                        
+                         <?php 
+		$excludeAttr = array();
+				$data = array();
+       
+        $attributes = $_product->getAttributes();
+        foreach ($attributes as $attribute) {
+            if ($attribute->getIsVisibleOnFront() && !in_array($attribute->getAttributeCode(), $excludeAttr)) {
+                $value = $attribute->getFrontend()->getValue($_product);
+
+                if (!$_product->hasData($attribute->getAttributeCode())) {
+                    $value = Mage::helper('catalog')->__('N/A');
+                } elseif ((string)$value == '') {
+                    $value = Mage::helper('catalog')->__('No');
+                } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
+                    $value = Mage::app()->getStore()->convertPrice($value, true);
+                }
+
+                if (is_string($value) && strlen($value)) {
+                    $data[$attribute->getAttributeCode()] = array(
+                        'label' => $attribute->getStoreLabel(),
+                        'value' => $value,
+                        'code'  => $attribute->getAttributeCode()
+                    );
+                }
+            }
+        }
+		
+				
+				
+				$cat_ids = $_product->getCategoryIds();
+				$level_1_cat_id = array();
+				$level_2_cat_id = array();
+				
+				foreach($cat_ids as $cat_id){				
+				$category_cat = Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($cat_id);
+				
+				if($category_cat->getLevel()==2){
+					$level_1_cat_id[] = $category_cat->getId();
+				}
+				
+				if($category_cat->getLevel()==3){
+					$level_2_cat_id[$category_cat->getParentCategory()->getId()] = $category_cat->getId();					
+				}
+				
+				}
+				
+				$level_1_cat =  Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($level_1_cat_id[0]);
+				$level_2_cat = Mage::getModel('catalog/category')
+								->setStoreId(Mage::app()->getStore()->getId())
+								->load($level_2_cat_id[$level_1_cat_id[0]]);				
+			
+				?>
+                        <p>
+                        <?php
+                            $sd1=$level_1_cat->getName();
+                          $sd2=$level_2_cat->getName();
+                           $sd3=$category_cat->getName();
+                            
+                      
+                        ?>
+                        "<?php echo $_product->getExamName();?>", also known as <?php echo $_product->getSku();?> exam, is a <?php echo $level_1_cat->getName();?> Certification.
+                        With the complete collection of questions and answers, 
+                        Braindump2go has assembled to take you through <?php echo $_product->getQA()?> to your <?php echo $_product->getSku()?> Exam preparation. In the <?php echo $_product->getSku()?> exam resources, you will cover every field and category in
+                         <?php echo $sd1?> <a href="<?php echo $level_2_cat->getUrl()?>"><?php echo $sd2?></a>
+                         <?php if(!isset($sd1) && !isset($sd2)){?>
+                         <a href="<?php echo $category_cat->getUrl()?>"><?php echo $sd3;?></a>
+                         <?php }?>
+                        helping to ready you for your successful <?php if(isset($sd1)){?><?php echo $sd1;?><?php }else{echo $sd3;}?> Certification.
+                        </p>
+                        
+                        <h2>Free Demo Download</h2>
+                            <p>Braindump2go offers free demo for <?php echo $_product->getSku()?> exam (<?php echo $_product->getExamName()?>). You can check out the interface,
+                             question quality and usability of our practice exams before you decide to buy it. </p>
+
+			<p style="color:#D30303;font-weight:bold;font-family:Arial;font-size:13px;padding:0;margin:0;">
+			<input type="checkbox" disabled="disabled" checked="checked" style="margin:0 0 4px 0;" /> Printable PDF &nbsp;&nbsp; 
+			<input type="checkbox" checked="checked" disabled="disabled" style="margin:0 0 4px 0;" /> Premium VCE + VCE Simulator
+			</p>
+
+                </div>
+                
+
+        
+                <div class="product-shop" style="float:right;width:540px;">
+                  
+        			
+        		
+        			
+                    <?php echo $this->getChildHtml('alert_urls') ?>
+        			
+                    
+        			
+                    <?php echo $this->getTierPriceHtml() ?>
+        			
+                    <?php echo $this->getChildHtml('extrahint') ?>
+        
+        		
+        
+                    <?php echo $this->getChildHtml('other');?>
+                    
+                    
+
+          
+            <?php if(!$_product->isSaleable() && $_isActive): ?>
+            	<div class="product-options" style="padding:10px;border-bottom:1px solid #e4e4e4;">
+            		<table width="100%">
+            			<tr>
+            				<td colspan="4" style="padding-bottom:5px;">
+            					<strong>We are already working hard to make <?php echo $_product->getSku();?> Exam available to our valued customers. If you are interested in <?php echo $_product->getSku();?> Exam, provide us your email and we will notify you.</strong>
+            				</td>
+            			</tr>            			
+            			<tr>
+            				<td style="padding-bottom:5px;"><?php echo $this->__('Email') ?></td>
+            				<td>
+            					<input type="text" id="subscription_email" name="subscription_email" value="" style="width:200px;" class="input-text required-entry validate-email" />
+            				</td>
+            				<td style="">&nbsp;</td>
+            				<td>
+            					<button onclick="productAddToCartForm.submit();" class="button btn-cart" type="button"><span><span><?php echo $this->__('Notify Me!') ?></span></span></button>
+            				</td>
+            			</tr>
+
+
+            		</table>
+            	</div>
+            <?php endif; ?>
+
+    <script type="text/javascript">
+    //<![CDATA[
+            var productAddToCartForm = new VarienForm('product_addtocart_form');
+            productsAddToCartForm.submit = function(){
+                    if (this.validator.validate()) {
+                            this.form.submit();
+                    }
+            }.bind(productAddToCartForm);
+    //]]>
+    </script>
+    
+    
+        
+                    <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                        <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
+                    <?php endif;?>
+        
+                </div>
+        
+        
+        
+                <div class="clearer"></div>
+                <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+                    <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+                <?php endif;?>
+            </form>
+        </div>
+    
+    </div>
+    <script type="text/javascript">
+    //<![CDATA[
+/*        var productAddToCartForm = new VarienForm('product_addtocart_form');
+        productAddToCartForm.submit = function(button, url) {
+            if (this.validator.validate()) {
+                var form = this.form;
+                var oldUrl = form.action;
+
+                if (url) {
+                   form.action = url;
+                }
+                var e = null;
+                try {
+                    this.form.submit();
+                } catch (e) {
+                }
+                this.form.action = oldUrl;
+                if (e) {
+                    throw e;
+                }
+
+                if (button && button != 'undefined') {
+                    button.disabled = true;
+                }
+            }
+        }.bind(productAddToCartForm);
+
+        productAddToCartForm.submitLight = function(button, url){
+            if(this.validator) {
+                var nv = Validation.methods;
+                delete Validation.methods['required-entry'];
+                delete Validation.methods['validate-one-required'];
+                delete Validation.methods['validate-one-required-by-name'];
+                if (this.validator.validate()) {
+                    if (url) {
+                        this.form.action = url;
+                    }
+                    this.form.submit();
+                }
+                Object.extend(Validation.methods, nv);
+            }
+        }.bind(productAddToCartForm);*/
+    //]]>
+    </script>
+    </div>
+<div class="whychoose">
+        <div class="wc_1"></div>
+        <div class="wc_2"></div>
+        <div class="wc_3"></div>
+        <div class="wc_4"></div>
+       
+        <div class="wc_title">
+                 <h2>Braindump2go Engine Features</h2>
+        </div>
+        <div class="wc_text">
+            <div class="Engine_Features1">
+                <h4>Quality and Value for the  <?php echo $_product->getSku();?> Exam</h4>
+                <p>
+                Braindump2go Practice Exams for <?php echo $level_1_cat->getName();?> <?php echo $level_2_cat->getName();?>  
+                <a  href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_product->getSku() ?>"><?php echo $_product->getSku() ?></a>
+                are written to the highest standards of technical accuracy, 
+                using only certified subject matter experts and published authors for development.
+                </p>
+            </div>
+            <div class="Engine_Features2">
+                <h4>100% Guarantee to Pass Your <?php echo $_product->getSku() ?> Exam</h4>
+                <p>If you do not pass the  
+                <?php echo $sd1?> <?php echo $sd2?>
+                         <?php if(!isset($sd1) && !isset($sd2)){?>
+                         <?php echo $sd3;?>
+                         <?php }?>
+                
+                
+                 <?php echo $_product->getSku() ?> exam (<?php echo $_product->getExamName() ?>) on your first attempt using our Braindump2go testing engine, we will give you a FULL REFUND of your purchasing fee. </p>
+            </div>
+      
+        <div class="Engine_Features3">
+            <h4>Downloadable, Interactive <?php echo $_product->getSku() ?> Testing engines</h4>
+            <p>
+            Our <?php echo $_product->getExamName() ?>  Preparation Material provides you everything you will need to take a 
+            <?php echo $sd1?> <?php echo $sd2?>
+                         <?php if(!isset($sd1) && !isset($sd2)){?>
+                         <?php echo $sd3;?> 
+                         <?php }?> <?php echo $_product->getSku()?>
+               examination. Details are researched and produced by
+                         
+                             <?php if(!isset($sd1)){?>
+                                <a href="<?php echo $category_cat->getUrl()?>"><?php echo $sd3;?> Certification</a>
+                              <?php }else{?>
+                                <a href="<?php echo $level_1_cat->getUrl()?>"><?php echo $sd1;?> Certification </a>
+                                
+                             <?php }?>  
+            Experts who are constantly using industry experience to produce precise, and logical.
+            </p>
+        </div>
+        <div class="Engine_Features4">
+            <ul>
+            <li>Comprehensive questions and answers about <?php echo $_product->getSku() ?> exam </li>
+            <li><?php echo $_product->getSku() ?> exam questions accompanied by exhibits </li>
+            <li>Verified Answers Researched by Industry Experts and almost 100% correct </li>
+            <li><?php echo $_product->getSku() ?> exam questions updated on regular basis </li>
+            <li>Same type as the certification exams, <?php echo $_product->getSku() ?> exam preparation is in multiple-choice questions (MCQs). </li>
+            <li>Tested by multiple times before publishing </li>
+            <li>Try free <?php echo $_product->getSku() ?> exam demo before you decide to buy it in Braindump2go.com </li>
+            </ul>
+        </div>
+</div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addCss"><stylesheet>css/aw_productrelater.css</stylesheet></action>
+        </reference>
+    </default>
+    <catalog_product_view>
+        <reference name="content">
+            <block type="productrelater/list" name="productrelater_list">
+                <action method="setLocation">
+                    <location>product_page</location>
+                </action>
+            </block>
+        </reference>
+    </catalog_product_view>
+</layout>

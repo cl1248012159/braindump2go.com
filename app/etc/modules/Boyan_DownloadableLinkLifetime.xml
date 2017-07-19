@@ -1,0 +1,8 @@
+<config>
+  <modules>
+    <Boyan_DownloadableLinkLifetime>
+      <active>true</active>
+      <codePool>local</codePool>
+    </Boyan_DownloadableLinkLifetime>
+  </modules>
+</config>

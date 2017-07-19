@@ -1,0 +1,140 @@
+<script type="text/javascript">
+function openMenu(obj,id){
+	obj.className="level1 over";
+	document.getElementById('display_id'+id).className = 'needdisplay shown-sub';
+	document.getElementById('level1_id'+id).className = 'level1_a over_a';
+}
+function closeMenu(obj,id){
+	obj.className="level1";
+	document.getElementById('display_id'+id).className = 'needdisplay';
+	document.getElementById('level1_id'+id).className = 'level1_a';
+}
+
+</script>
+<div class="cat_tree">
+	<div class="cat_tree_title">Popular Certification Vendor</div>
+	<ul class="cat_tree_ul">
+	<?php
+	$categories = array();
+	$level_count = 0;
+	foreach ($this->getStoreCategories() as $category) {
+	if($level_count>34){
+?>
+	<li class="leve1_more">
+		<a class="level1_a"  href="<?php echo $this->getUrl()?>all-products.html" >
+			<span>More &gt;&gt;</span>
+		</a>
+	</li>
+	<?php
+break;}else{$level_count++;}
+		if ($category->getIsActive()) {		
+	?>
+	<li class="level1" onmouseover="openMenu(this,<?php echo $category->getId();?>)" onmouseout="closeMenu(this,<?php echo $category->getId();?>)">
+		<a class="level1_a" id="level1_id<?php echo $category->getId();?>" href="<?php echo $this->getCategoryUrl($category) ?>" >
+			<span><?php echo $this->htmlEscape($category->getName());?></span>
+		</a>
+		<!--chlid--cat- none-to-black-->
+		<?php 
+		// get all children
+		if (Mage::helper('catalog/category_flat')->isEnabled()) {
+			$children = (array)$category->getChildrenNodes();
+			$childrenCount = count($children);
+		} else {
+			$children = $category->getChildren();
+			$childrenCount = $children->count();
+		}
+		
+		// select active children
+		$childCategories = array();
+		foreach ($children as $child) {
+			if ($child->getIsActive()) {
+			$childCategories[] = $child;
+			}
+		}
+		if($childCategories){
+		$count_childCategories = count($childCategories);
+		if($count_childCategories){
+		$child_count=1;
+		?>
+		<div class="needdisplay" id="display_id<?php echo $category->getId();?>" >
+			<div class="need_left">
+				<div class="need_left_title">Hot Certification List</div>
+				<ul class="need_menu">
+				<?php
+				foreach ($childCategories as $child) {
+				if($child_count>9){break;}
+				?>
+					<li>
+					<a href="<?php echo $this->getCategoryUrl($child) ?>" >
+						<span><?php echo $this->htmlEscape($child->getName());?></span>
+					</a>
+					</li>
+				<?php
+				$child_count++;
+					
+				}
+				}
+				?>
+				<li class="last_need_menu"><a href="<?php echo $this->getCategoryUrl($category) ?>">More&gt;&gt;</a></li>
+				</ul>
+			</div>
+			<div class="need_right">
+				<div class="need_right_title">Hot Exam List</div>
+				<?php 
+				 $categoryId = $category->getId();
+				 $category = Mage::getModel('catalog/category')->load($categoryId);
+				 $resource = Mage::getSingleton('core/resource');
+					$read = $resource->getConnection('catalog_read');
+					$categoryProductTable = $resource->getTableName('catalog/category_product');
+					$categoryTable = $resource->getTableName('catalog_category_entity');
+					$productEntityIntTable = (string)Mage::getConfig()->getTablePrefix() . 'catalog_product_entity_int';
+					$eavAttributeTable = $resource->getTableName('eav/attribute');
+					$select_subcat = $read->select()
+										  ->from(array('cat'=>$categoryTable))
+										  ->where('cat.path LIKE ?',$category->getPath().'/%')
+										  ;
+					$subcategories = $read->fetchAll($select_subcat);
+					$subcatids = array();
+					if(!empty($subcategories)):
+						foreach( $subcategories as $subcategory ):
+						$subcatids[] = $subcategory['entity_id'];
+						endforeach;
+					endif;
+					array_push($subcatids,$categoryId);
+								   
+					$select = $read->select()
+								   ->from(array('cp'=>$categoryProductTable))
+								   ->join(array('pei'=>$productEntityIntTable), 'pei.entity_id=cp.product_id', array())
+								   ->joinNatural(array('ea'=>$eavAttributeTable))
+								   ->where('cp.category_id IN(?)', $subcatids)
+								   ->where('pei.value=1')
+								   ->where('ea.attribute_code="hot_product"');
+			
+								   $rows = $read->fetchAll($select);
+					$ids = array();
+			
+					foreach($rows AS $row) {
+					  $ids[] = $row['product_id'];
+					}
+					$ret = implode(",", $ids);
+					$collection = Mage::getModel('catalog/product')->getCollection();
+				  $collection->getSelect()->where("e.entity_id in (?)", $ids);
+				  $collection->addAttributeToSelect(array('name','sku','url_key'));
+				  $collection->setOrder('SKU','desc');
+				  $productList = $collection->load();
+				  ?>
+				<ul class="hot_left_menu">
+				<?php $hot=0; foreach( $productList as $product_hot):if($hot<20){$hot++;?>
+					<li><a href="<?php echo $product_hot->getProductUrl(); ?>" ><?php echo $product_hot->getSku();?></a></li>
+				<?php } endforeach; ?>
+				</ul>
+			</div>
+		</div>
+		<!--chlid--cat--><?php }?>
+	</li>
+	<?php }//level1
+	}//foreach -  level1?>
+	</ul>
+
+</div>
+

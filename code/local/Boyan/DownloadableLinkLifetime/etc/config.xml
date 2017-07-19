@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Boyan_DownloadableLinkLifetime>
+      <version>0.1.0</version>
+    </Boyan_DownloadableLinkLifetime>
+  </modules>
+  
+  <frontend>
+    <routers>
+      <downloadablelinklifetime>
+        <use>standard</use>
+        <args>
+          <module>Boyan_DownloadableLinkLifetime</module>
+          <frontName>downloadablelinklifetime</frontName>
+        </args>
+      </downloadablelinklifetime>
+    </routers>
+    <layout>
+      <updates>
+        <downloadablelinklifetime>
+          <file>downloadablelinklifetime.xml</file>
+        </downloadablelinklifetime>
+      </updates>
+    </layout>
+  </frontend>
+  
+    <admin>
+        <routers>
+            <outofstocksubscription>
+                <use>admin</use>
+                <args>
+                    <module>Boyan_DownloadableLinkLifetime</module>
+                    <frontName>downloadablelinklifetime</frontName>
+                </args>
+            </outofstocksubscription>
+        </routers>        
+    </admin> 
+</config>

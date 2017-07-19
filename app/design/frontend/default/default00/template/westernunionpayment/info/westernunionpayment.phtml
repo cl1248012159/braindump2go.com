@@ -1,0 +1,6 @@
+<p><?php echo $this->getMethod()->getTitle() ?></p>
+<?php if($this->getInfo()->getAdditionalData()): ?>
+    <?php if($this->getPayableTo()): ?>
+        <p><strong><?php echo $this->__('Payment Information:') ?></strong> <?php echo $this->htmlEscape($this->getPayableTo()) ?></p>
+    <?php endif; ?>
+<?php endif; ?>

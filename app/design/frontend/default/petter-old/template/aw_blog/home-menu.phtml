@@ -1,0 +1,21 @@
+<div class="testimonials">
+    <h2>Our Latest Testimonials</h2>
+    <img width="82" height="92" border="0" alt="Audrey Barrett" src="/skin/frontend/default/petter/images/testimoinals1_03-14.jpg" style="float:left;">
+<div class="desc">
+<?php if ($posts = $this->getRecent()): ?>
+
+		<?php $i=0; foreach ($posts as $post): ?>
+        <?php $i++;?>
+        <div class="testimArea <?php if($i!=4): ?> first<?php elseif($i==4): ?> last<?php endif; ?>">
+			<?php echo substr($post->getShortContent(),0,150); ?>...
+         </div>
+         <?php if($i>=2){break;}?>
+		<?php endforeach; ?>
+      
+
+<?php endif; ?>
+		      
+	</div>
+    <div class="more"><a href="/reviews">More</a></div>
+</div>
+<div class="bott"></div>

@@ -1,0 +1,40 @@
+<?php
+ $_cat = new Mage_Catalog_Block_Navigation();
+ $curent_cat = $_cat->getCurrentCategory();
+ $curent_cat_id = $curent_cat->getId(); 
+ $category = Mage::registry('current_category')->getName(); 
+$_cat = new Mage_Catalog_Block_Navigation();
+$curent_cat = $_cat->getCurrentCategory();
+$curent_cat_id = $curent_cat->getId(); 
+ $category = Mage::registry('current_category')->getName(); 
+ $products = Mage::getModel('catalog/category')->load($curent_cat_id)
+    ->getProductCollection()
+    ->addAttributeToSelect('*')
+    ->addAttributeToFilter('status', 1)
+    ->addAttributeToFilter('visibility', 4);
+?>
+<div id="blockCert" class="bigPad" style="margin-top:36px;width:450px;">
+   <div class="topFrm">
+        <!--<h1><?php echo $category;?></h1>-->
+   </div>
+   <div class="middFrm">
+   <h2>Latest <?php echo $category;?> Certification Exams</h2>
+        <?php $i = 0; foreach($products as $_product):?>
+            <div class="areaCert">
+                <h1 style="float:left;"><a href="<?php echo $_product->getSku();?>.html<?php //echo $_product->getProductUrl()?>">
+                     <?php echo $_product->getSku();?>
+                </a></h1>&nbsp;-&nbsp;<?php echo $_product->getName();?>
+<!--                <?php echo $this->__('Last Updated:')?>
+                <?php echo $_product->getUpdated()?>
+                <br/>
+                <?php echo $this->__('Total Questions:')?>
+                <?php echo $_product->getQA()?>
+               <br/>
+              <a href="<?php echo $_product->getProductUrl() ?>">
+                    <img title="<?php echo $_product->getName() ?>" alt="<?php echo $_product->getName() ?>" src="/skin/frontend/default/default/images/detailBtn2.png"/>
+              </a>
+-->            </div>
+        <?php if($i++ >30) break; endforeach;?>
+   </div>
+    
+</div>

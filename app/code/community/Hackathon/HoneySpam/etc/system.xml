@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Magento
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@magentocommerce.com so we can send you a copy immediately.
+*
+* @category  Hackathon
+* @package   Hackathon_HoneySpam
+* @author    Andreas Emer <honeyspam@emdec.de>
+* @author    Fabian Blechschmidt <hackathon@fabian-blechschmidt.de>
+* @author    Sascha Wohlgemuth <sascha.wohlgemuth@gmail.com>
+* @author    Bastian Ike <bastian.ike@gmail.com>
+* @author    Peter Ukener <peterukener@gmail.com>
+* @copyright 2012 Magento Hackathon
+* @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+* @link      http://www.magento-hackathon.de/
+*/
+-->
+<config>
+    <tabs>
+        <hackathon translate="label" module="hackathon_honeyspam">
+            <label>Hackathon</label>
+            <sort_order>100</sort_order>
+        </hackathon>
+    </tabs>
+
+    <sections>
+        <hackathon translate="label" module="hackathon_honeyspam">
+            <label>HoneySpam</label>
+            <tab>hackathon</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>10</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <honeyspam translate="label" module="hackathon_honeyspam">
+                    <label>Hackathon HoneySpam</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <expanded>1</expanded>
+                    <fields>
+                        <enableHoneypotName>
+                            <label>Enable hidden honeypot field</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enableHoneypotName>
+
+                        <honeypotName>
+                            <label>Hidden field name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><enableHoneypotName>1</enableHoneypotName></depends>
+                        </honeypotName>
+
+                        <enableHoneypotAccountCreateTime>
+                            <label>Enable register time check</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enableHoneypotAccountCreateTime>
+
+                        <honeypotAccountCreateTime>
+                            <label>Minimum time for registration in seconds</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><enableHoneypotAccountCreateTime>1</enableHoneypotAccountCreateTime></depends>
+                        </honeypotAccountCreateTime>
+
+                        <enableSpamIndexing>
+                            <label>Enable spam indexing for input fields</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                        </enableSpamIndexing>
+
+                        <spamIndexLevel>
+                            <label>Set max. spam index trust level</label>
+                            <comment>An index of 2.5 should be enough to block average spam logins The lower the level, the higher the level, the more spam gets through</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends><enableSpamIndexing>1</enableSpamIndexing></depends>
+                        </spamIndexLevel>
+                    </fields>
+                </honeyspam>
+            </groups>
+        </hackathon>
+    </sections>
+</config>

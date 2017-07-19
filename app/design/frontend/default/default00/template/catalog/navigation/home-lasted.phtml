@@ -1,0 +1,64 @@
+<?php 
+ $categoryId = 2;
+ $category = Mage::getModel('catalog/category')->load($categoryId);
+ $resource = Mage::getSingleton('core/resource');
+	$read = $resource->getConnection('catalog_read');
+	$categoryProductTable = $resource->getTableName('catalog/category_product');
+	$categoryTable = $resource->getTableName('catalog_category_entity');
+	$productEntityIntTable = (string)Mage::getConfig()->getTablePrefix() . 'catalog_product_entity_int';
+	$eavAttributeTable = $resource->getTableName('eav/attribute');
+	$select_subcat = $read->select()
+						  ->from(array('cat'=>$categoryTable))
+						  ->where('cat.path LIKE ?',$category->getPath().'/%')
+						  ;
+	$subcategories = $read->fetchAll($select_subcat);
+	$subcatids = array();
+	if(!empty($subcategories)):
+		foreach( $subcategories as $subcategory ):
+		$subcatids[] = $subcategory['entity_id'];
+		endforeach;
+	endif;
+	array_push($subcatids,$categoryId);
+				   
+	$select = $read->select()
+				   ->from(array('cp'=>$categoryProductTable))
+				   ->join(array('pei'=>$productEntityIntTable), 'pei.entity_id=cp.product_id', array())
+				   ->joinNatural(array('ea'=>$eavAttributeTable))
+				   ->where('cp.category_id IN(?)', $subcatids)
+				   ->where('pei.value=1')
+				   ->where('ea.attribute_code="latest_update"');
+
+				   $rows = $read->fetchAll($select);
+	$ids = array();
+
+	foreach($rows AS $row) {
+	  $ids[] = $row['product_id'];
+	}
+	$ret = implode(",", $ids);
+	$collection = Mage::getModel('catalog/product')->getCollection();
+  $collection->getSelect()->where("e.entity_id in (?)", $ids);
+  $collection->addAttributeToSelect(array('name','price','url_key','small_image'));
+  $collection->setOrder('SKU','desc');
+  $productList = $collection->load();
+  $count_hotproduct = count($productList);
+?>
+
+<?php  if($count_hotproduct){ ?>
+<div class="home-special">
+	<div class="home_speial_title">Latest Update</div>
+	 <ul class="home_special_ul">
+	  	<?php foreach( $productList as $product_latest):?>
+	      <li>
+			  <a href="<?php echo $product_latest->getProductUrl();?>" >
+				<?php echo $product_latest->getSku();?>
+			  </a>
+		  </li>
+	 	<?php endforeach;?>
+	  </ul>
+</div>
+	  
+	  
+<?php  } ?>
+	
+
+
