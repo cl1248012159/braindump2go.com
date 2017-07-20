@@ -81,7 +81,7 @@
 
   $collection->addAttributeToSelect(array('name','price','url_key','small_image'));
 
-  $collection->setOrder('SKU','desc');
+  $collection->setOrder('entity_id','desc');
 
   $productList = $collection->load();
 
@@ -131,7 +131,7 @@
 
          <?php $i++;?>
 
-	      <li>
+	      <li data-id="<?php echo $product_new_release->getId();?>">
 
 			  <a href="<?php echo $product_new_release->getProductUrl();?>" >
 
