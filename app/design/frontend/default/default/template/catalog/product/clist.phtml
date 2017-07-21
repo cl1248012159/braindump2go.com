@@ -22,7 +22,7 @@ $curent_cat_id = $curent_cat->getId();
    <h2>Latest <?php echo $category;?> Certification Exams</h2>
         <?php $i = 0; foreach($products as $_product):?>
             <div class="areaCert" data-id="<?php echo $_product->getId();?>">
-                <h1 style="float:left;"><a href="<?php echo $_product->getSku();?>.html<?php //echo $_product->getProductUrl()?>">
+                <h1 style="float:left;"><a href="<?php echo str_replace(array('.','_'),"-",$_product->getSku());?>.html<?php //echo $_product->getProductUrl()?>">
                      <?php echo $_product->getSku();?>
                 </a></h1>&nbsp;-&nbsp;<?php echo $_product->getName();?>
 <!--                <?php echo $this->__('Last Updated:')?>
