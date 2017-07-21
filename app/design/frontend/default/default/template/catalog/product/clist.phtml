@@ -11,16 +11,17 @@ $curent_cat_id = $curent_cat->getId();
     ->getProductCollection()
     ->addAttributeToSelect('*')
     ->addAttributeToFilter('status', 1)
-    ->addAttributeToFilter('visibility', 4);
+    ->addAttributeToFilter('visibility', 4)
+    ->setOrder('entity_id','desc');
 ?>
 <div id="blockCert" class="bigPad" style="margin-top:36px;width:450px;">
-   <div class="topFrm">
-        <!--<h1><?php echo $category;?></h1>-->
-   </div>
+   <!--<div class="topFrm">
+        <h1><?php echo $category;?></h1>
+   </div>-->
    <div class="middFrm">
    <h2>Latest <?php echo $category;?> Certification Exams</h2>
         <?php $i = 0; foreach($products as $_product):?>
-            <div class="areaCert">
+            <div class="areaCert" data-id="<?php echo $_product->getId();?>">
                 <h1 style="float:left;"><a href="<?php echo $_product->getSku();?>.html<?php //echo $_product->getProductUrl()?>">
                      <?php echo $_product->getSku();?>
                 </a></h1>&nbsp;-&nbsp;<?php echo $_product->getName();?>
@@ -34,7 +35,8 @@ $curent_cat_id = $curent_cat->getId();
                     <img title="<?php echo $_product->getName() ?>" alt="<?php echo $_product->getName() ?>" src="/skin/frontend/default/default/images/detailBtn2.png"/>
               </a>
 -->            </div>
-        <?php if($i++ >30) break; endforeach;?>
+        <?php //if($i++ >30) break; ?>
+      <?php endforeach;?>
    </div>
     
 </div>

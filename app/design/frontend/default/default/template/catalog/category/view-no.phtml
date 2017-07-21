@@ -46,7 +46,7 @@
 .bigPad {background:none;width:auto;}
 .topFrm {background:none;}
 .topFrm h1 {background:none;margin:0;padding:0;}
-.middFrm {background:none;width:auto;border-right:1px #ccc dotted;}
+.middFrm {background:none;width:auto;/*border-right:1px #ccc dotted;*/}
 #blockCert {width:300px;}
 #blockCert .topFrm h1 {background:none;margin:0;padding:0;}
 .areaCert {float:none;height:auto;width:auto;}
@@ -85,7 +85,7 @@ Using the online virtual <?php echo $_category->getName();?> practice engine at 
 <?php if($_category->getLevel()==2){?>
 
 <div id="blockCert" class="bigPad">
-        <div class="topFrm">
+        <div class="topFrm" style="width:100%;">
             <h1>List of <?php echo $_helper->categoryAttribute($_category, $_category->getName(), 'name') ?> Certification Exams</h1>
         </div>
 	<?php $categories = $this->getCurrentCategory()->getChildrenCategories();?>		

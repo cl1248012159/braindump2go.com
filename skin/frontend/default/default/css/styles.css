@@ -2547,7 +2547,7 @@ a:hover{
     background: url("../images/pad0.png") repeat scroll 0 0 transparent;
     display: block;
     font-size: 16px;
-    padding: 6px;
+    padding: 6px;margin-bottom:0;
     text-align: center;
 }
 
@@ -2568,8 +2568,17 @@ a:hover{
     height: 9px;
 }
 #venexamlist ul {
-    padding: 10px;
+    padding: 10px;background:#ECECEC;
+    *zoom:1;
 }
+#venexamlist ul:after{
+            display:block;
+            content:"clear";
+            height:0;
+            clear:both;
+            overflow:hidden;
+            visibility:hidden;
+    }
 
 #venexamlist {
     margin-bottom: 5px;
