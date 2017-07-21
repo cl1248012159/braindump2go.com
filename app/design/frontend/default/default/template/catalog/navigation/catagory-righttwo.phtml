@@ -11,7 +11,8 @@ $curent_cat_id = $curent_cat->getId();
     ->getProductCollection()
     ->addAttributeToSelect('*')
     ->addAttributeToFilter('status', 1)
-    ->addAttributeToFilter('visibility', 4);
+    ->addAttributeToFilter('visibility', 4)
+    ->setOrder('entity_id','desc');;
 ?>
 <style type="text/css">
 #venexamlist {
@@ -55,7 +56,7 @@ $curent_cat_id = $curent_cat->getId();
   <h1>Popular <?php echo $category;?> Exams</h1>
   <ul>
     <?php $i = 0; foreach($products as $_product):?>
-    <li><a href="<?php echo trim($_product->getSku());?>.html"><?php echo $_product->getSku();?></a></li>
+    <li data-id="<?php echo $_product->getId()?>"><a href="<?php echo trim($_product->getSku());?>.html"><?php echo $_product->getSku();?></a></li>
     <?php if ($i++ > 70) break; endforeach;?>
   </ul>
   <!--div class="foot"></div--> 

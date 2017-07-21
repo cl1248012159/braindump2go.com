@@ -83,9 +83,9 @@ class Mage_Catalog_Block_Product_List extends Mage_Catalog_Block_Product_Abstrac
                     $layer->setCurrentCategory($category);
                 }
             }
-            $this->_productCollection = $layer->getProductCollection();
+            $this->_productCollection = $layer->getProductCollection()->setOrder('entity_id','desc');
 
-            $this->prepareSortableFieldsByCategory($layer->getCurrentCategory());
+            //$this->prepareSortableFieldsByCategory($layer->getCurrentCategory());
 
             if ($origCategory) {
                 $layer->setCurrentCategory($origCategory);

@@ -70,6 +70,7 @@ width:255px;
 }
 </style>
 <?php
+    $this->getRequest()->setParam('limit','all');
     $_productCollection=$this->getLoadedProductCollection();
     $_helper = $this->helper('catalog/output');
 ?>
@@ -89,7 +90,7 @@ width:255px;
   <div class="certif_list_text">
     <!--h2>List of CCNA Certification Exams</h2-->
     <?php foreach ($_productCollection as $_product): ?>
-    <ul >
+    <ul data-id="<?php echo $_product->getId() ?>">
       <li class="l1"><a href="<?php echo $_product->getProductUrl() ?>"> <?php echo $_product->getSku() ?></a></li>
       <li class="l2"><a href="<?php echo $_product->getProductUrl() ?>"><?php echo $_helper->productAttribute($_product, $_product->getName() , 'name'); ?></a> </li>
       <!--li class="l3">$125.99</li>
