@@ -60,18 +60,26 @@ class AW_Productrelater_Block_List extends Mage_Catalog_Block_Product_Abstract {
      * @return string list of categories separated by commas
      */
     protected function getCategories() {
-        $categories = array();
-        if (Mage::registry("current_category"))
-            $categories[] = Mage::registry("current_category")->getId();
-        elseif ($this->getProduct()&&$this->getProduct()->getCategoryIds())
+        /*
+        要求：调取相同分类下的产品
+            1.  如果此产品有二级分类，只调取相同二级分类下的产品 （不超过10个）
+            2.  如果此产品只有一级分类，调取相同一级分类下的产品（不超过10个）
+        */
+        if ($this->getProduct()&&$this->getProduct()->getCategoryIds()){
             $categories = $this->getProduct()->getCategoryIds();
-        $_categories = '';
-        for($i = 0;$i<count($categories);$i++)
-            $_categories .= ($i==0?'':',').$categories[$i];
-        return $_categories;
+        } 
+        return array_slice($categories,0,2);
+
+        // $categories = array();
+        // if (Mage::registry("current_category"))
+        //     $categories[] = Mage::registry("current_category")->getId();
+        // elseif ($this->getProduct()&&$this->getProduct()->getCategoryIds())
+        //     $categories = $this->getProduct()->getCategoryIds();
+        // $_categories = implode("," ,  $categories);
+        // return $_categories;
     }
 	
-    public function _toHtml() {
+    public function _toHtml($categories=null) {
         //Loading extension configuration.
         //If some options are setted from block call they has higher priority than default values
         $myConf=Mage::getStoreConfig("productrelater");
@@ -91,7 +99,7 @@ class AW_Productrelater_Block_List extends Mage_Catalog_Block_Product_Abstract {
         if(!(int)$this->getItemscount()||(int)$this->getItemscount()<1)     $this->setItemscount(3);
         if((int)$this->getSource()!=1&&(int)$this->getSource()!=2)          $this->setSource(1);
 
-        $categories = $this->getCategories();
+        $categories = $categories?$categories:$this->getCategories();
         if(empty($categories)) $this->setSource(1);
 
         if((int)$this->getSelectproducts()<1||(int)$this->getSelectproducts()>3)    $this->setSelectproducts(2);
@@ -118,7 +126,8 @@ class AW_Productrelater_Block_List extends Mage_Catalog_Block_Product_Abstract {
 
         //Source filter
         $collection->addStoreFilter(Mage::app()->getStore()->getCode());
-        if($this->getSource()==2&&!empty($categories)) $collection->addCategoriesFilter($categories);
+
+        if($this->getSource()==2&&!empty($categories)) $collection->addCategoriesFilter(array_pop($categories));
 
         //Fetch only in stock filter
         if($this->getFetchinstock())
@@ -236,8 +245,13 @@ class AW_Productrelater_Block_List extends Mage_Catalog_Block_Product_Abstract {
             foreach ($collection as $product) {
                 $product->setDoNotUseCategoryId(true);
             }
-            $this->setItems($collection);
-            $this->setCount(count($collection));
+            if(count($collection)){
+                $this->setItems($collection);
+                $this->setCount(count($collection));
+            }else{
+                $this->_toHtml($categories);
+            }
+            
         }
         return parent::_toHtml();
     }
