@@ -43,7 +43,7 @@ margin: 1px 0 0 0;
 	background: none;
 	border: 0;
 	margin: 0;
-	width: 180px;
+    width:auto;
 	height: auto;
 }
 .quick-access .block-cart .block-content {
@@ -104,7 +104,7 @@ function hide_recetlyadd(){
         </ol>
         <script type="text/javascript">decorateList('cart-sidebar', 'none-recursive')</script>
     <?php else: ?>
-        <p class="empty" style="padding:2px 0 0 0;"><?php echo $this->__(' Cart: no Items') ?></p>
+        <p class="empty" style="padding:2px 0 0 0;float:right;"><?php echo $this->__(' Cart: no Items') ?></p>
     <?php endif ?>
     </div>
 </div>

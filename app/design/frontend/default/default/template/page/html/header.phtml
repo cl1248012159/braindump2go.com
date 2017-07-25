@@ -50,8 +50,7 @@ text-transform:none;
 }
 
 .mininav {
-float: left;
-width: 466px;
+float: right;
 }
 .mininav ul li {
 float: right;
@@ -107,7 +106,7 @@ color:#29517A;
 				<?php echo $this->getChildHtml('cart_sidebar') ?>
 				</div>
                 
-            <div class="mininav">
+            <div class="mininav" style="width:auto;">
                 <ul>
                     <!--li class="m2"><a href="/checkout/cart/"  rel="nofollow"> 
 		    <?php // $cart = Mage::helper('checkout/cart')->getCart()->getItemsCount();?> 

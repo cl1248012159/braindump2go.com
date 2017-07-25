@@ -488,7 +488,7 @@ tr.summary-details-excluded { font-style:italic; }
 .header-container .top-container { clear:both; padding:5px 10px 0 12px; text-align:right; }
 .header-container .top-container a { font-size:11px; color:#ebbc58; }
 
-.quick-access .block-cart{ background:url(../header/carttip_bg.gif) no-repeat; border:0; margin:0 0 0 10px;float: left; width:305px; height:42px;}
+.quick-access .block-cart{ background:url(../header/carttip_bg.gif) no-repeat; border:0; margin:0 0 0 10px;float: left; height:42px;}
 .quick-access .block-cart .block-content{ position:relative; background:none;margin: 0 0 0 30px;text-align: left;width: 273px;line-height: 32px;}
 .quick-access .block-cart .summary{ background:none; margin:0; padding:0; float:left;line-height: 42px; width: 198px;}
 .quick-access .block-cart .summary a{ color:#27905D;}
