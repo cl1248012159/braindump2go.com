@@ -15,6 +15,7 @@
  * @license    http://ecommerce.aheadworks.com/LICENSE-M1.txt
  */
 ?>
+<?php if($this->getCount()>0) : ?>
 <?php $_helper = $this->helper('catalog/output'); ?>
 <?php $_product = $this->getProduct(); ?>
 <br>
@@ -34,16 +35,16 @@
                     </div>
                 </div>
             </div>
-  
+
    <div id="ProBCon">
 <div class="reviews_text">
 
-	<?php if($this->getCount()>0) : ?>
+
         <?php $i=0;?>
            <ul data-categoryids="<?php echo implode(",",$_product->getCategoryIds()) ?>">
     	<?php foreach ($this->getItems() as $item) : ?>
             <?php $i++;?>
-           
+
             <li class="re1" data-categoryids="<?php echo implode(",",$item->getCategoryIds()) ?>">
                     <a href="<?php echo $item->getProductUrl()?>">
                         <?php echo $this->htmlEscape($item->getSku())?>
@@ -54,11 +55,11 @@
                         <?php echo $this->htmlEscape($item->getExamName())?>
                     </a>
             </li>
-            
+
     	<?php endforeach; ?>
           </ul>
-   <?php endif;?>
- 
+
+
         <div class="clear"></div>
     </div>
     </div>
@@ -86,3 +87,4 @@ color: #4F81BD;
     text-decoration: underline;
 }
 </style>
+<?php endif;?>

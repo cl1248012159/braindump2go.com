@@ -245,13 +245,16 @@ class AW_Productrelater_Block_List extends Mage_Catalog_Block_Product_Abstract {
             foreach ($collection as $product) {
                 $product->setDoNotUseCategoryId(true);
             }
+
             if(count($collection)){
                 $this->setItems($collection);
                 $this->setCount(count($collection));
             }else{
-                $this->_toHtml($categories);
+                if($categories){
+                    $this->_toHtml($categories);
+                }
             }
-            
+
         }
         return parent::_toHtml();
     }
