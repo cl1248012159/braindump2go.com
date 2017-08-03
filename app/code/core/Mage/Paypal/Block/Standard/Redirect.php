@@ -38,6 +38,8 @@ class Mage_Paypal_Block_Standard_Redirect extends Mage_Core_Block_Abstract
         foreach ($standard->getStandardCheckoutFormFields() as $field=>$value) {
             $form->addField($field, 'hidden', array('name'=>$field, 'value'=>$value));
         }
+        //<input type="hidden" name="lc" value="en_US">
+        $form->addField("lc", 'hidden', array('name'=>'lc', 'value'=>'en_US'));
         $html = '<html><body>';
         $html.= $this->__('You will be redirected to the PayPal website in a few seconds.');
         $html.= $form->toHtml();
